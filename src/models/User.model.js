@@ -62,15 +62,18 @@ const userSchema = new  Schema(
             ]
         }
     },
+    
     {
-        image: {
-			type: String,
-			match: [
-				/^.*\.(jpg|jpeg|png|gif|bmp)$/i,
-				'Ingrese una ruta de imagen valida',
-			],
-		},
-    },
+        // image:{
+        //     type:String,
+        //     match: [
+        //         /^.*\.(jpg|jpeg|png|gif|bmp)$/i,
+        //         'Ingrese una ruta de imagen valida',
+        //     ],
+        //     default: ""
+        // }
+    }
+    ,
     {
         role:{
             type: String,
@@ -90,12 +93,12 @@ const userSchema = new  Schema(
     {
         // order:{
         //     type: [Schema.Types.ObjectId],
-		// 	ref: 'Orders',
+		// 	   ref: 'Orders',
         // }
     },
     {
         // booking:{
-        //     type: [Schema.Types.ObjectId],
+        //  type: [Schema.Types.ObjectId],
 		// 	ref: 'Bookings',
         // }
     },
