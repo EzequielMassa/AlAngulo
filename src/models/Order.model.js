@@ -12,7 +12,6 @@ const orderSchema = new Schema(
 			ref: 'Users',
 			// required: true,
 		},
-		subTotal: Number
 	},
 	{
 		timestamps: true,
