@@ -10,7 +10,7 @@ const bookingSchema = new Schema(
 		soccerField: {
 			type: Schema.Types.ObjectId,
 			ref: 'SoccerFields',
-			// required: [true, 'The SoccerField is required'],
+			required: [true, 'The SoccerField is required'],
 		},
 		time: {
 			type: String,
