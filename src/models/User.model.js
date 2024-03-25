@@ -88,26 +88,28 @@ const userSchema = new  Schema(
     ,
     
         active:{
-            Boolean
+            type:Boolean,
+            default:true
         }
     ,
     
-        // order:{
-        //     type: [Schema.Types.ObjectId],
-		// 	   ref: 'Orders',
-        // }
+        orders:{
+            type: [Schema.Types.ObjectId],
+			   ref: 'Orders',
+        }
+    ,
     
     
-        // booking:{
-        //  type: [Schema.Types.ObjectId],
-		// 	ref: 'Bookings',
-        // }
+        booking:{
+         type: [Schema.Types.ObjectId],
+			ref: 'Bookings',
+        }
     
 	
 	},
     {
         timestamps: true,
-        versionkey:false
+        versionKey:false
     }
 	
 )

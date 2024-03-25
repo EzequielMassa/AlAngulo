@@ -16,8 +16,15 @@ export const getUser = async(req,res) =>{
     const {id} = req.params
     try {
         const user = await UserModel.findById(id)
-        // .populate('orders')
-        // .populate('bookings')
+        .populate('orders'
+			// path: 'orders',
+			// select: {product , orderDate , user},
+		)
+        .populate(
+           'bookings'
+            // path:'bookings',
+            // select:{soccerField , time , date}
+        )
         return res.status(200).json(user)
     } catch (error) {
         return res.status(404).json({ message: 'no pudimos encontrar el usuario solicitado' })
@@ -124,7 +131,7 @@ export const login = async (req,res) =>{
 // export const getOrderUser = async (req,res) =>{
 //     const {id} = req.params
 //     try {
-//         const orders = await Orders.find({user:user._id})
+//         const orders = await Orders.find({user._id:id})
 //         res.json(orders)
 
 //     } catch (error) {
