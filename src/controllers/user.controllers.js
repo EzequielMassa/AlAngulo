@@ -83,9 +83,9 @@ export const deleteUser = async (req,res)=>{
 //controlador para actualizar un usuario
 export const updateUser = async (req,res) => {
         const {id} = req.params
-        const {name,lastname,email,phone,role} = req.body
+        const {name,lastname,email,phone,image,role} = req.body
     try {
-        const updateUser = await UserModel.findByIdAndUpdate(id,{name,lastname,email,phone,role},{new:true}) 
+        const updateUser = await UserModel.findByIdAndUpdate(id,{name,lastname,email,phone,image,role},{new:true}) 
         res.json(updateUser)    
 
     } catch (error) {
