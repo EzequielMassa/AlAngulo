@@ -7,6 +7,7 @@ const soccerFieldSchema = new Schema(
 			required: [true, 'The name is required'],
 			minLength: [3, 'The field name must contain at least 3 characters'],
 			maxLength: [100, 'The field name must be 100 characters maximum'],
+			unique: true,
 		},
 		description: {
 			type: String,
@@ -20,15 +21,14 @@ const soccerFieldSchema = new Schema(
 		price: {
 			type: Number,
 			required: [true, 'The price is required'],
-			default: 10000,
 		},
-		type: {
+		grass: {
 			type: String,
 			enum: {
-				values: ['cesped natural', 'cesped sintetico'],
+				values: ['natural', 'sintetic'],
 				message: '{VALUE} is not a valid soccer field type',
 			},
-			default: 'cesped sintetico',
+			default: 'sintetic',
 			lowercase: true,
 			required: [true, 'The soccer field type is required'],
 		},
@@ -39,7 +39,7 @@ const soccerFieldSchema = new Schema(
 				'The image path format is invalid',
 			],
 			default:
-				'https://images.pexels.com/photos/399187/pexels-photo-399187.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+				'https://images.pexels.com/photos/399187/pexels-photo-399187.jpeg',
 		},
 		size: {
 			type: Number,
@@ -52,6 +52,7 @@ const soccerFieldSchema = new Schema(
 	},
 	{
 		timestamps: true,
+		versionKey: false,
 	}
 )
 
