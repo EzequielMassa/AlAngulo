@@ -1,21 +1,24 @@
 import { Schema, model } from 'mongoose'
 const orderSchema = new Schema(
 	{
-		orderDate: Date,
+		orderDate: {
+			type: Date,
+			required: true,
+		},
 		product: {
 			type: Schema.Types.ObjectId,
 			ref: 'Products',
-			// required: true,
+			required: true,
 		},
 		user: {
 			type: Schema.Types.ObjectId,
 			ref: 'Users',
-			// required: true,
+			required: true,
 		},
 	},
 	{
 		timestamps: true,
-        versionKey: false
+		versionKey: false,
 	}
 )
 
