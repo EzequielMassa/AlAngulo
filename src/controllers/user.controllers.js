@@ -1,11 +1,11 @@
-import { UserModel } from "../models/User.model";
+import { UserModel } from "../models/User.model.js";
 import bcrypt from 'bcrypt'
-const jwt = require('jsonwebtoken')
+import jwt from "jsonwebtoken"
 
 //controlador para traer todos los usuarios
 export const getUsers = async (req,res)=>{
     try {
-        const users =await UserModel.find()
+        const users = await UserModel.find()
         res.status(200).json(users)
     } catch (error) {
         return res.status(404).json({ message: error.message })
@@ -15,35 +15,33 @@ export const getUsers = async (req,res)=>{
 export const getUser = async(req,res) =>{
     const {id} = req.params
     try {
-        const user = UserModel.findById(id)
-        .populate('orders')
-        .populate('bookings')
+        const user = await UserModel.findById(id)
+        // .populate('orders')
+        // .populate('bookings')
         return res.status(200).json(user)
     } catch (error) {
-        return res.status(404).json({ message: 'no pudimos encontrar el producto solicitado' })
+        return res.status(404).json({ message: 'no pudimos encontrar el usuario solicitado' })
     }
 }
 //obtener solo el email del usuario
 export const getUserEmail = async (req,res) =>{
     const {email} = req.params
-    try {
-        const emailFound = await UserModel.find({
-            email:email
-        })
-        res.status(200).json(emailFound)
-    } catch (error) {
-        res.status(400).json({message:"email no encontrado"})
-    }
+    const emailFound = await UserModel.find({
+        email:email
+    })
+    {emailFound.length > 0 ? res.status(200).json(emailFound) : res.status(400).json({message:"email no encontrado"})}
+       
+    
 }
 
 //controlador para crear un usuario
 export const createUser =  async (req,res)=>{
-   
+    const {name,lastname,email,phone,role,password}  = req.body 
     try {
-        const {name,lastname,email,phone,role,password}  = req.body    
+          
         const salt = await bcrypt.genSalt(10)
         const passwordHash = await bcrypt.hash(password,salt)
-        const newUser = new UserModel(
+        const newUser = await UserModel.create(
             {
                 name,
                 lastname,
@@ -53,29 +51,34 @@ export const createUser =  async (req,res)=>{
                 password:passwordHash
             }
         )
-        const user = await newUser.save()
-        res.json(user)
+        
+        res.status(201).json({message:"usuario creado exitosamente"})
     } catch (error) {
-        res.status(400).json({message:error.message})
+        console.log(error)
+        // res.status(400).json({message:error.message})
     }
 }
 //controlador para borrar un usuario
 export const deleteUser = async (req,res)=>{
-    const {id} = req.params.id
+    const {id} = req.params
     try {
-        await UserModel.findByIdAndDelete(id)
-        res.json({message:"Usuario eliminado"})
+      const deletedUser =  await UserModel.findByIdAndDelete(id)
+        if(!deleteUser) {
+            return res.status(404).json({ message: 'Usuario no encontrado' });
+        }
+        res.json({ message: 'Usuario eliminado correctamente' });
     } catch (error) {
-        res.status(400).send({message:'no se pudo eliminar'})
+        console.error('Error deleting user:', error);
+        res.status(500).json({ message: 'Internal server error' });
     }
 }
 
 //controlador para actualizar un usuario
 export const updateUser = async (req,res) => {
-    try {
         const {id} = req.params
-        const {name,lastname,email,phone} = req.body
-        const updateUser = await UserModel.findByIdAndUpdate(id,{name,lastname,email,phone},{new:true}) 
+        const {name,lastname,email,phone,role} = req.body
+    try {
+        const updateUser = await UserModel.findByIdAndUpdate(id,{name,lastname,email,phone,role},{new:true}) 
         res.json(updateUser)    
 
     } catch (error) {
@@ -85,8 +88,9 @@ export const updateUser = async (req,res) => {
 
 //controlador para loguear usuario con autenticacion
 export const login = async (req,res) =>{
+    const {email,password} = req.body
     try {
-        const {email,password} = req.body
+       
         if(!email || !password) {
             return res.status(400).json({message:"Por favor llena todos los campos"})
         }

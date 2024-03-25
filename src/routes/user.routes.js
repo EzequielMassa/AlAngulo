@@ -3,7 +3,7 @@ import {getUser,getUsers,getUserEmail,createUser,deleteUser,updateUser,login} fr
 const router = Router()
 router.get('/user/:id',getUser)
 router.get('/users',getUsers)
-router.get('/user/:email',getUserEmail)
+router.get('/userEmail/:email',getUserEmail)
 router.post('/users',createUser)
 router.delete('/user/:id',deleteUser)
 router.put('/user/:id',updateUser)

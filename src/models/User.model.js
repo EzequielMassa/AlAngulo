@@ -13,8 +13,8 @@ const userSchema = new  Schema(
                 'Ingrese un nombre valido',
             ],
         }
-    },
-    {
+    ,
+    
      lastname:{
         type: String,
 			required: true,
@@ -25,10 +25,11 @@ const userSchema = new  Schema(
                 'Ingrese un apellido valido',
             ],
      }
-    },
-    {
+    ,
+    
         email:{
             type: String,
+            unique:true,
 			required: true,
 			minLength: 6,
 			maxLength: 150, 
@@ -37,8 +38,8 @@ const userSchema = new  Schema(
                 'Ingrese un email valido',
             ],
         }
-    },
-    {
+    ,
+    
         phone:{
             type: String,
 			required: true,
@@ -49,8 +50,8 @@ const userSchema = new  Schema(
                 'Ingrese un numero de celular valido',
             ]
         }
-    },
-    {
+    ,
+    
         password:{
             type: String,
 			required: true,
@@ -61,9 +62,9 @@ const userSchema = new  Schema(
                 'Ingrese un password valido',
             ]
         }
-    },
+    ,
     
-    {
+    
         // image:{
         //     type:String,
         //     match: [
@@ -72,9 +73,9 @@ const userSchema = new  Schema(
         //     ],
         //     default: ""
         // }
-    }
-    ,
-    {
+    
+    
+    
         role:{
             type: String,
             enum:{
@@ -84,28 +85,31 @@ const userSchema = new  Schema(
                 lowercase: true
             } 
         }
-    },
-    {
+    ,
+    
         active:{
-            Boolean:true
+            Boolean
         }
-    },
-    {
+    ,
+    
         // order:{
         //     type: [Schema.Types.ObjectId],
 		// 	   ref: 'Orders',
         // }
-    },
-    {
+    
+    
         // booking:{
         //  type: [Schema.Types.ObjectId],
 		// 	ref: 'Bookings',
         // }
-    },
-	{
-		timestamps: true,
+    
+	
+	},
+    {
+        timestamps: true,
         versionkey:false
-	}
+    }
+	
 )
 
 export const UserModel = model('User', userSchema)
