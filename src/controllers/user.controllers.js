@@ -1,6 +1,8 @@
 import { UserModel } from "../models/User.model";
 import bcrypt from 'bcrypt'
+const jwt = require('jsonwebtoken')
 
+//controlador para traer todos los usuarios
 export const getUsers = async (req,res)=>{
     try {
         const users =await UserModel.find()
@@ -14,12 +16,14 @@ export const getUser = async(req,res) =>{
     const {id} = req.params
     try {
         const user = UserModel.findById(id)
+        .populate('orders')
+        .populate('bookings')
         return res.status(200).json(user)
     } catch (error) {
         return res.status(404).json({ message: 'no pudimos encontrar el producto solicitado' })
     }
 }
-
+//obtener solo el email del usuario
 export const getUserEmail = async (req,res) =>{
     const {email} = req.params
     try {
@@ -32,6 +36,7 @@ export const getUserEmail = async (req,res) =>{
     }
 }
 
+//controlador para crear un usuario
 export const createUser =  async (req,res)=>{
    
     try {
@@ -54,16 +59,18 @@ export const createUser =  async (req,res)=>{
         res.status(400).json({message:error.message})
     }
 }
-
+//controlador para borrar un usuario
 export const deleteUser = async (req,res)=>{
+    const {id} = req.params.id
     try {
-        await UserModel.findByIdAndDelete(req.params.id)
+        await UserModel.findByIdAndDelete(id)
         res.json({message:"Usuario eliminado"})
     } catch (error) {
         res.status(400).send({message:'no se pudo eliminar'})
     }
 }
 
+//controlador para actualizar un usuario
 export const updateUser = async (req,res) => {
     try {
         const {id} = req.params
@@ -76,6 +83,7 @@ export const updateUser = async (req,res) => {
     }
 }
 
+//controlador para loguear usuario con autenticacion
 export const login = async (req,res) =>{
     try {
         const {email,password} = req.body
@@ -91,23 +99,42 @@ export const login = async (req,res) =>{
             return res.status(400).json({message:"user o password incorrectos"})
         }
         res.json({message:"Bienvenido, alquila tu cancha tranquilo!"})
+        const token = jwt.sign({
+            id : user._id,
+            name: user.name,
+            lastname: user.lastname,
+            phone:user.phone,
+            role:user.role
+        }
+        ,
+        process.env.SECRET
+        ,
+        {expiresIn:'1D'}
+        )
+        res.header(token).json({token})
     } catch (error) {
         res.status(400).json({message:error.message})
     }
 }
 
-export const getOrderUser = async (req,res) =>{
-    try {
-        const {id} = req.params
-    } catch (error) {
-        
-    }
-}
-export const getBookingUser = async (req,res)=>{
-    try {
-        
-    } catch (error) {
-        
-    }
-}
+// export const getOrderUser = async (req,res) =>{
+//     const {id} = req.params
+//     try {
+//         const orders = await Orders.find({user:user._id})
+//         res.json(orders)
+
+//     } catch (error) {
+//         res.status(500).json({message:'error del servidor'})
+//     }
+// }
+// export const getBookingUser = async (req,res)=>{
+//     const {id} = req.params
+//     try {
+//         const bookings = await Bookings.find({user:user._id})
+//         res.json(bookings)
+
+//     } catch (error) {
+//         res.status(500).json({message:'error del servidor'})
+//     }
+// }
 
