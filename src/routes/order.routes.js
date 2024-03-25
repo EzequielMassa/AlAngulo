@@ -10,10 +10,10 @@ import {
 
 const router = Router()
 
-router.get('/api/orders', getAllOrders)
-router.post('/api/orders', createOrder)
-router.get('/api/orders/:id', getOrderById)
-router.delete('/api/orders/delete/:id', deleteOrder)
+router.get('/orders', getAllOrders)
+router.post('/orders', createOrder)
+router.get('/orders/:id', getOrderById)
+router.delete('/orders/delete/:id', deleteOrder)
 // router.put('/product/update/:id', updateProduct)
 // router.get('/products/category/:category', getProductByCategory)
 // router.get('/products/price/:sortOrder', getProductsSortedByPrice)

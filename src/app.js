@@ -10,7 +10,7 @@ const app = express()
 app.use(express.json())
 app.use(morgan('dev'))
 app.use(cors())
-app.use(orderRoutes)
+app.use('./api',orderRoutes)
 
 // aca van las rutas
 // ejemplo :
