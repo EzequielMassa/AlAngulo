@@ -13,7 +13,7 @@ const productSchema = new Schema(
             minLength: [3,'the description field must have at least 3 characters'],
             maxLength: [500,'the description field must have a maximun of 500 characters'],
         },
-		categories: {
+		categorie: {
 			type: Schema.Types.ObjectId,
 			ref: 'Categories',
 			// required: true,

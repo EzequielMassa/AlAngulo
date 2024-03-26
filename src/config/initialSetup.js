@@ -1,4 +1,5 @@
 import { SoccerFieldModel } from '../models/SoccerField.model.js'
+import { ProductModel } from '../models/Product.models.js'
 
 export const createSoccerFields = async () => {
 	try {
@@ -27,6 +28,42 @@ export const createSoccerFields = async () => {
 				price: 12000,
 				grass: 'sintetic',
 				size: 11,
+			}).save(),
+		])
+	} catch (error) {
+		console.error(error)
+	}
+}
+export const createProducts = async () => {
+	try {
+		const count = await ProductModel.estimatedDocumentCount()
+
+		if (count > 0) return
+
+		const values = await Promise.all([
+			new ProductModel({
+				name: 'Casaca AlAngulo',
+				description: 'Camiseta del club con logo de Alngulo',
+				categorie: 'Camiseta',
+				price: 7500,
+				quantity: 1,
+				image: 'imagen.jpg'
+			}).save(),
+			new ProductModel({
+				name: 'Casaca AlAngulo Alternativa',
+				description: 'Camiseta del club con logo de Alngulo',
+				categorie: 'Camiseta',
+				price: 8500,
+				quantity: 1,
+				image: 'imagen2.jpg'
+			}).save(),
+			new ProductModel({
+				name: 'Pelota AlAngulo',
+				description: 'Pelota del club con logo de Alngulo',
+				categorie: 'Pelotas',
+				price: 35500,
+				quantity: 1,
+				image: 'imagen3.jpg'
 			}).save(),
 		])
 	} catch (error) {
