@@ -1,26 +1,27 @@
 import { Schema, model } from 'mongoose'
+import { dateRegEx } from '../utils/dateRegEx.js'
 
 const bookingSchema = new Schema(
 	{
 		user: {
 			type: Schema.Types.ObjectId,
-			ref: 'Users',
-			// required: [true, 'The User is required'],
+			ref: 'User',
+			required: [true, 'The User is required and must be a valid user'],
 		},
 		soccerField: {
 			type: Schema.Types.ObjectId,
-			ref: 'SoccerFields',
-			required: [true, 'The SoccerField is required'],
+			ref: 'SoccerField',
+			required: [
+				true,
+				'The SoccerField is required and must be a valid soccerfield',
+			],
 		},
 		time: {
 			type: String,
 		},
 		date: {
 			type: String,
-			match: [
-				/^\d{4}-\d{2}-\d{2}$/,
-				'Incorrect date format , must be YYYY-mm-dd',
-			],
+			match: [dateRegEx, 'Incorrect date format , must be YYYY-mm-dd'],
 			validate: {
 				validator: function (v) {
 					const fullDate = `${v} ${this.time}:00 GMT+0000`
