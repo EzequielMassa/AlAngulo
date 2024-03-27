@@ -13,8 +13,8 @@ const userSchema = new  Schema(
                 'Ingrese un nombre valido',
             ],
         }
-    },
-    {
+    ,
+    
      lastname:{
         type: String,
 			required: true,
@@ -25,10 +25,11 @@ const userSchema = new  Schema(
                 'Ingrese un apellido valido',
             ],
      }
-    },
-    {
+    ,
+    
         email:{
             type: String,
+            unique:true,
 			required: true,
 			minLength: 6,
 			maxLength: 150, 
@@ -37,8 +38,8 @@ const userSchema = new  Schema(
                 'Ingrese un email valido',
             ],
         }
-    },
-    {
+    ,
+    
         phone:{
             type: String,
 			required: true,
@@ -49,8 +50,8 @@ const userSchema = new  Schema(
                 'Ingrese un numero de celular valido',
             ]
         }
-    },
-    {
+    ,
+    
         password:{
             type: String,
 			required: true,
@@ -61,18 +62,21 @@ const userSchema = new  Schema(
                 'Ingrese un password valido',
             ]
         }
-    },
-    {
-        image: {
-			type: String,
-			match: [
-				/^.*\.(jpg|jpeg|png|gif|bmp)$/i,
-				'Ingrese una ruta de imagen valida',
-			],
-		},
-    },
-    {
-        role:{
+    ,
+    
+    
+        image:{
+            type:String,
+            match: [
+                /^.*\.(jpg|jpeg|png|gif|bmp)$/i,
+                'Ingrese una ruta de imagen valida',
+            ],
+            default: ""
+        }
+    
+    
+    
+       , role:{
             type: String,
             enum:{
                 values:['user','admin'],
@@ -81,28 +85,36 @@ const userSchema = new  Schema(
                 lowercase: true
             } 
         }
-    },
-    {
+    ,
+    
         active:{
-            Boolean:true
+            type:Boolean,
+            default:true
         }
-    },
+    ,
+    chart:{
+        type:[Schema.Types.ObjectId],
+        ref:"Chart"
+    }
+    //     orders:{
+    //         type: [Schema.Types.ObjectId],
+	// 		   ref: 'Orders',
+    //     }
+    // ,
+    
+    
+    //     booking:{
+    //      type: [Schema.Types.ObjectId],
+	// 		ref: 'Bookings',
+    //     }
+    
+	
+	},
     {
-        // order:{
-        //     type: [Schema.Types.ObjectId],
-		// 	ref: 'Orders',
-        // }
-    },
-    {
-        // booking:{
-        //     type: [Schema.Types.ObjectId],
-		// 	ref: 'Bookings',
-        // }
-    },
-	{
-		timestamps: true,
-        versionkey:false
-	}
+        timestamps: true,
+        versionKey:false
+    }
+	
 )
 
 export const UserModel = model('User', userSchema)
