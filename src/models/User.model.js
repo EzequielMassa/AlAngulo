@@ -92,18 +92,21 @@ const userSchema = new  Schema(
             default:true
         }
     ,
+    chart:{
+        type:[Schema.Types.ObjectId],
+        ref:"Chart"
+    }
+    //     orders:{
+    //         type: [Schema.Types.ObjectId],
+	// 		   ref: 'Orders',
+    //     }
+    // ,
     
-        orders:{
-            type: [Schema.Types.ObjectId],
-			   ref: 'Orders',
-        }
-    ,
     
-    
-        booking:{
-         type: [Schema.Types.ObjectId],
-			ref: 'Bookings',
-        }
+    //     booking:{
+    //      type: [Schema.Types.ObjectId],
+	// 		ref: 'Bookings',
+    //     }
     
 	
 	},

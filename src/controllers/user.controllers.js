@@ -109,7 +109,7 @@ export const login = async (req,res) =>{
         if(!validPassword){
             return res.status(400).json({message:"user o password incorrectos"})
         }
-        res.json({message:"Bienvenido, alquila tu cancha tranquilo!"})
+        
         const token = jwt.sign({
             id : user._id,
             name: user.name,
@@ -118,11 +118,12 @@ export const login = async (req,res) =>{
             role:user.role
         }
         ,
-        process.env.SECRET
+        process.env.SECRET_KEY
         ,
         {expiresIn:'1D'}
         )
         res.header(token).json({token})
+        res.status(200).json({message:"Bienvenvido, alquila tu cancha tranquilo"})
     } catch (error) {
         res.status(400).json({message:error.message})
     }
