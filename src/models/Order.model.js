@@ -7,12 +7,12 @@ const orderSchema = new Schema(
 		},
 		product: {
 			type: Schema.Types.ObjectId,
-			ref: 'Products',
+			ref: 'Product',
 			required: true,
 		},
 		user: {
 			type: Schema.Types.ObjectId,
-			ref: 'Users',
+			ref: 'User',
 			required: true,
 		},
 	},
