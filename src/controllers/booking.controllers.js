@@ -1,5 +1,6 @@
 import { Error } from 'mongoose'
 import { BookingModel } from '../models/Booking.model.js'
+import { CartModel } from '../models/Cart.model.js'
 import { SoccerFieldModel } from '../models/SoccerField.model.js'
 import { UserModel } from '../models/User.model.js'
 import { dateRegEx } from '../utils/dateRegEx.js'
@@ -100,6 +101,10 @@ export const createBooking = async (req, res) => {
 			time,
 			date,
 		})
+
+		const userCart = await CartModel.findOne({ user: user._id })
+		userCart.bookings.push(reserva._id)
+		await userCart.save()
 		return res.status(201).json(reserva)
 	} catch (error) {
 		return res.status(400).json({ message: error.message })
