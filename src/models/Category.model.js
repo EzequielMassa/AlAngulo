@@ -1,0 +1,19 @@
+import  { Schema, model }  from "mongoose";
+
+const CategorySchema = new Schema({
+    name : {
+        type : String,
+        required : [true, "The name is required"],
+        minLength : [3, "The field description must contain at least 3 characters"],
+        maxLength : [100, 'The field description must be 100 characters maximum'],
+        unique : true
+    },
+    description : {
+        type : String,
+        required : [true, "The description is required"],
+        minLength : [3, "The field description must contain at least 3 characters"],
+        maxLength : [500, 'The field description must be 500 characters maximum']
+    }
+});
+
+export const CategoryModel = model("Category", CategorySchema);
