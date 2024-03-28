@@ -6,9 +6,10 @@ export const getUserCart = async (req, res) => {
 
 		const userCart = await CartModel.findOne({ user: userId }).populate({
 			path: 'bookings',
-			populate: { path: 'soccerField' },
+			populate: { path: 'soccerField', select: '-createdAt -updatedAt' },
+			select: '-user -createdAt -updatedAt',
 		})
-
+		userCart.getCartTotal()
 		res.status(200).json({ data: userCart })
 	} catch (error) {
 		res.status(500).json({ message: error.message })
