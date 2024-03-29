@@ -58,8 +58,7 @@ export const createUser =  async (req,res)=>{
                 password:passwordHash
             }
         )
-        
-        res.status(201).json({message:"usuario creado exitosamente"})
+        await res.status(201).json({message:"usuario creado exitosamente"})
     } catch (error) {
         console.log(error)
         // res.status(400).json({message:error.message})
@@ -123,30 +122,9 @@ export const login = async (req,res) =>{
         {expiresIn:'1D'}
         )
         res.header(token).json({token})
-        res.status(200).json({message:"Bienvenvido, alquila tu cancha tranquilo"})
+        // res.status(200).json({message:"Bienvenvido, alquila tu cancha tranquilo"})
     } catch (error) {
         res.status(400).json({message:error.message})
     }
 }
-
-// export const getOrderUser = async (req,res) =>{
-//     const {id} = req.params
-//     try {
-//         const orders = await Orders.find({user._id:id})
-//         res.json(orders)
-
-//     } catch (error) {
-//         res.status(500).json({message:'error del servidor'})
-//     }
-// }
-// export const getBookingUser = async (req,res)=>{
-//     const {id} = req.params
-//     try {
-//         const bookings = await Bookings.find({user:user._id})
-//         res.json(bookings)
-
-//     } catch (error) {
-//         res.status(500).json({message:'error del servidor'})
-//     }
-// }
 

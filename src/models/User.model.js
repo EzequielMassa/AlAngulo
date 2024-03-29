@@ -86,27 +86,13 @@ const userSchema = new  Schema(
             } 
         }
     ,
+    //para que el admin administre sus permisos como usuario
     
         active:{
             type:Boolean,
             default:true
         }
-    ,
-    chart:{
-        type:[Schema.Types.ObjectId],
-        ref:"Chart"
-    }
-    //     orders:{
-    //         type: [Schema.Types.ObjectId],
-	// 		   ref: 'Orders',
-    //     }
-    // ,
     
-    
-    //     booking:{
-    //      type: [Schema.Types.ObjectId],
-	// 		ref: 'Bookings',
-    //     }
     
 	
 	},
