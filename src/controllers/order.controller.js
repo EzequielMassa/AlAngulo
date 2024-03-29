@@ -1,12 +1,18 @@
 
 
 import { OrderModel } from '../models/order.model.js'
+import { UserModel } from '../models/User.model.js'
+import { ProductModel } from '../models/Product.models.js'
 
 
 
 export const getAllOrders = async (req, res) => {
 	try {
-		const order = await OrderModel.find()
+		const order = await OrderModel.find().populate({
+			path: 'product',
+			select: 'name price quantity'
+		})
+	
 		return res.status(200).json(order)
 	} catch (error) {
 		return res.status(404).json({ message: error.message })
@@ -15,22 +21,29 @@ export const getAllOrders = async (req, res) => {
 
 export const createOrder = async (req, res) => {
 	try {
-		// const user = await UserModel.findById(req.body.user)
-		// console.log(user)
-		// const product = await ProductModel.findById(req.body.product)
-		// console.log(product)
+		const user = await UserModel.findById(req.body.user)
+		if (!user) return res.status(404).json({message: 'user not found'})
+		const productModels = await OrderModel.find({user: user._id})
+		if (!productModels) return res.status(404).json({message : 'productModel not found'})
+		const product = await ProductModel.findById(req.body.product)
+		if (!product) return res.status(404).json({message: 'product not found'})
+		const quantity = req.body.quantity
+		if (!quantity) return res.status(400).json({message: 'quantity is required'})
+
+		productModels.push(product)
+
 		const orderDate = req.body.orderDate
 		
-		console.log(orderDate)
 		const order = await OrderModel.create({
 			orderDate,
-			// user,
-			// product,
+			user,
+			product : productModels,
+			quantity,
+			
 		})
-		res.status(200).json(order)
+		res.status(201).json(order)
 	} catch (error) {
-		console.log(error)
-		return res.status(400).json({ message: error.message })
+		return res.status(500).json({ message: error.message })
 	}
 }
 export const getOrderById = async (req, res) => {

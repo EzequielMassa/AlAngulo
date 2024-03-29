@@ -44,25 +44,22 @@ export const createProducts = async () => {
 			new ProductModel({
 				name: 'Casaca AlAngulo',
 				description: 'Camiseta del club con logo de Alngulo',
-				categorie: 'Camiseta',
+				// categorie: 'Camiseta',
 				price: 7500,
-				quantity: 1,
 				image: 'imagen.jpg'
 			}).save(),
 			new ProductModel({
 				name: 'Casaca AlAngulo Alternativa',
 				description: 'Camiseta del club con logo de Alngulo',
-				categorie: 'Camiseta',
+				// categorie: 'Camiseta',
 				price: 8500,
-				quantity: 1,
 				image: 'imagen2.jpg'
 			}).save(),
 			new ProductModel({
 				name: 'Pelota AlAngulo',
 				description: 'Pelota del club con logo de Alngulo',
-				categorie: 'Pelotas',
+				// categorie: 'Pelotas',
 				price: 35500,
-				quantity: 1,
 				image: 'imagen3.jpg'
 			}).save(),
 		])

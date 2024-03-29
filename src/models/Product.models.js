@@ -15,7 +15,7 @@ const productSchema = new Schema(
         },
 		categorie: {
 			type: Schema.Types.ObjectId,
-			ref: 'Categories',
+			ref: 'Categorie',
 			// required: true,
 		},
 		price: {
@@ -24,11 +24,6 @@ const productSchema = new Schema(
 			min: [1, 'El precio minimo es de $1, se ingreso ${VALUE}'],
             default: 1,
 		},
-        quantity:{
-            type: Number,
-            min: [1,'must have at least 1 product quantity'],
-            required: true,
-        },
 		image: {
 			type: String,
 			match: [
