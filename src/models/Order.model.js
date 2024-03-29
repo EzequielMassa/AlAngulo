@@ -5,16 +5,21 @@ const orderSchema = new Schema(
 			type: Date,
 			required: true,
 		},
-		product: {
+		product: [{
 			type: Schema.Types.ObjectId,
-			ref: 'Products',
-			required: true,
-		},
+			ref: 'Product',
+			// required: true,
+		}],
 		user: {
 			type: Schema.Types.ObjectId,
-			ref: 'Users',
+			ref: 'User',
 			required: true,
 		},
+		quantity : {
+			type: Number,
+			default : 1,
+			required : [true, 'the quantity is required'],
+		}
 	},
 	{
 		timestamps: true,
