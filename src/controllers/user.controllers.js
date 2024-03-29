@@ -1,6 +1,8 @@
 import { UserModel } from "../models/User.model.js";
-import bcrypt from 'bcrypt'
+import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
+import RoleModel from "../models/Role.model.js";
+import { populate } from "dotenv";
 
 //controlador para traer todos los usuarios
 export const getUsers = async (req,res)=>{
@@ -42,28 +44,45 @@ export const getUserEmail = async (req,res) =>{
 }
 
 //controlador para crear un usuario
-export const createUser =  async (req,res)=>{
-    const {name,lastname,email,phone,role,password}  = req.body 
+export const createUser = async (req, res) => {
     try {
-          
-        const salt = await bcrypt.genSalt(10)
-        const passwordHash = await bcrypt.hash(password,salt)
-        const newUser = await UserModel.create(
-            {
-                name,
-                lastname,
-                email,
-                phone,
-                role,
-                password:passwordHash
-            }
-        )
-        await res.status(201).json({message:"usuario creado exitosamente"})
+      const { name, lastname, email , phone, password,roles } = req.body;
+      const salt = await bcrypt.genSalt(10)
+      const passwordHash = await bcrypt.hash(password,salt)
+      // Creating a new User Object
+      const newUser = new UserModel({
+        name,
+        lastname,
+        email,
+        phone,
+        password:passwordHash
+      });
+  
+      // checking for roles
+      if (roles) {
+        const foundRoles = await RoleModel.find({ name: { $in: roles } });
+        newUser.roles = foundRoles.map((role) => role._id);
+      } else {
+        const role = await RoleModel.findOne({ name: "user" });
+        newUser.roles = [role._id];
+      }
+  
+      // Saving the User Object in Mongodb
+      const savedUser = await newUser.save();
+  
+      // Create a token
+      const token = jwt.sign({ id: savedUser._id,
+    name:savedUser.name,lastname:savedUser.lastname,email:savedUser.email,phone:savedUser.phone }, process.env.SECRET_KEY , {
+        expiresIn: 86400, // 24 hours
+      });
+  
+      return res.status(200).json({ token });
     } catch (error) {
-        console.log(error)
-        // res.status(400).json({message:error.message})
+      return res.status(500).json(error.message);
     }
-}
+  };
+
+
 //controlador para borrar un usuario
 export const deleteUser = async (req,res)=>{
     const {id} = req.params
@@ -100,7 +119,7 @@ export const login = async (req,res) =>{
         if(!email || !password) {
             return res.status(400).json({message:"Por favor llena todos los campos"})
         }
-        const user = await UserModel.findOne({email})
+        const user = await UserModel.findOne({email}).populate({path:"roles",select:"name -_id"})
         if(!user){
             return res.status(400).json({message:"El usuario no existe"})
         }
@@ -114,7 +133,7 @@ export const login = async (req,res) =>{
             name: user.name,
             lastname: user.lastname,
             phone:user.phone,
-            role:user.role
+            roles:user.roles
         }
         ,
         process.env.SECRET_KEY

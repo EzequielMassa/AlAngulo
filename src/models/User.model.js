@@ -76,15 +76,12 @@ const userSchema = new  Schema(
     
     
     
-       , role:{
-            type: String,
-            enum:{
-                values:['user','admin'],
-                message:`{VALUE} no esta definido`,
-                default:'user',
-                lowercase: true
-            } 
-        }
+       , roles:[
+       {
+        type: Schema.Types.ObjectId,
+        ref: "Role",
+       }
+       ]
     ,
     //para que el admin administre sus permisos como usuario
     
@@ -102,5 +99,6 @@ const userSchema = new  Schema(
     }
 	
 )
+
 
 export const UserModel = model('User', userSchema)
