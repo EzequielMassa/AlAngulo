@@ -2,24 +2,52 @@ import { Error } from 'mongoose'
 import { BookingModel } from '../models/Booking.model.js'
 import { SoccerFieldModel } from '../models/SoccerField.model.js'
 import { UserModel } from '../models/User.model.js'
+import { dateRegEx } from '../utils/dateRegEx.js'
 import { soccerFieldAvailableHours } from '../utils/soccerFieldAvailableHours.js'
 
 export const getAllBookings = async (req, res) => {
 	try {
 		const bookings = await BookingModel.find()
+			.populate({
+				path: 'user',
+				select: '-createdAt -updatedAt -password -orders -booking',
+			})
+			.populate({
+				path: 'soccerField',
+				select: '-createdAt -updatedAt',
+			})
+		if (!bookings) {
+			return res.status(404).json({ message: 'Bookings not found' })
+		}
 		return res.status(200).json({ data: bookings })
 	} catch (error) {
-		return res.status(404).json({ message: error.message })
+		return res.status(500).json({ message: error.message })
 	}
 }
 
 export const getAllBookingsByDate = async (req, res) => {
 	try {
 		const { date } = req.params
+		if (!date.match(dateRegEx)) {
+			return res.status(400).json({
+				message: 'Invalid date , please use the formate : YYYY-mm-dd ',
+			})
+		}
 		const bookings = await BookingModel.find({ date: date })
+			.populate({
+				path: 'user',
+				select: '-createdAt -updatedAt -password -orders -booking',
+			})
+			.populate({
+				path: 'soccerField',
+				select: '-createdAt -updatedAt',
+			})
+		if (!bookings) {
+			return res.status(404).json({ message: 'Bookings not found' })
+		}
 		return res.status(200).json({ data: bookings })
 	} catch (error) {
-		return res.status(404).json({ message: error.message })
+		return res.status(500).json({ message: error.message })
 	}
 }
 
@@ -27,10 +55,20 @@ export const getBookingById = async (req, res) => {
 	try {
 		const { id } = req.params
 		const booking = await BookingModel.find({ _id: id })
-		if (booking.length === 0) throw new Error('Booking not found')
+			.populate({
+				path: 'user',
+				select: '-createdAt -updatedAt -password -orders -booking',
+			})
+			.populate({
+				path: 'soccerField',
+				select: '-createdAt -updatedAt',
+			})
+		if (booking.length === 0) {
+			return res.status(404).json({ message: 'Booking not found' })
+		}
 		return res.status(200).json({ data: booking })
 	} catch (error) {
-		return res.status(404).json({ message: error.message })
+		return res.status(500).json({ message: error.message })
 	}
 }
 
@@ -57,22 +95,27 @@ export const createBooking = async (req, res) => {
 		}
 
 		const reserva = await BookingModel.create({
-			user,
-			soccerField,
+			user: user._id,
+			soccerField: soccerField._id,
 			time,
 			date,
 		})
-		return res.json(reserva)
+		return res.status(201).json(reserva)
 	} catch (error) {
 		return res.status(400).json({ message: error.message })
 	}
 }
 
 export const getAvailableHours = async (req, res) => {
-	const { soccerField, date } = req.query
+	const { soccerfield, date } = req.query
+	if (!soccerfield && !date) {
+		return res
+			.status(400)
+			.json({ message: 'soccerfield and date query not found' })
+	}
 	try {
 		const soccerFieldbookings = await getSoccerFieldAvailableHours(
-			soccerField,
+			soccerfield,
 			date
 		)
 		return res.status(200).json({ data: soccerFieldbookings })
@@ -114,13 +157,13 @@ export const deleteBooking = async (req, res) => {
 		const { id } = req.params
 		const booking = await BookingModel.findById(id)
 		if (!booking) {
-			return res.status(400).json({ message: `Booking Id : ${id} not found.` })
+			return res.status(404).json({ message: `Booking Id : ${id} not found.` })
 		}
 		await BookingModel.deleteOne({ _id: id })
 		return res
 			.status(200)
 			.json({ message: `Booking with Id : ${id} successfully deleted.` })
 	} catch (error) {
-		res.status(500).json({ message: `Something went wrong, please try again.` })
+		res.status(500).json({ message: error.message })
 	}
 }
