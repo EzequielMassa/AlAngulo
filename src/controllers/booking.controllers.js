@@ -1,5 +1,6 @@
 import { Error } from 'mongoose'
 import { BookingModel } from '../models/Booking.model.js'
+import { CartModel } from '../models/Cart.model.js'
 import { SoccerFieldModel } from '../models/SoccerField.model.js'
 import { UserModel } from '../models/User.model.js'
 import { dateRegEx } from '../utils/dateRegEx.js'
@@ -82,16 +83,21 @@ export const createBooking = async (req, res) => {
 			req.body.soccerField,
 			date
 		)
-
-		if (!time) throw new Error('time is required')
+		if (!user) return res.status(404).json({ message: 'User not found' })
+		if (!soccerField)
+			return res.status(404).json({ message: 'Soccerfield not found' })
+		if (!time) return res.status(400).json({ message: 'The time is required' })
 		const regExTime = /^([01]\d|2[0-3]):00$/
-		if (!regExTime.test(time))
-			throw new Error('Incorrect time format, must be HH:00')
+		if (!regExTime.test(time)) {
+			return res
+				.status(400)
+				.json({ message: 'Incorrect time format, must be HH:00' })
+		}
 
 		const bookingAlreadyExist = availableHours.find((hour) => hour === time)
 
 		if (!bookingAlreadyExist) {
-			throw new Error('Hour already taken')
+			return res.status(400).json({ message: 'Hour already taken' })
 		}
 
 		const reserva = await BookingModel.create({
@@ -100,9 +106,13 @@ export const createBooking = async (req, res) => {
 			time,
 			date,
 		})
+
+		const userCart = await CartModel.findOne({ user: user._id })
+		userCart.bookings.push(reserva._id)
+		await userCart.save()
 		return res.status(201).json(reserva)
 	} catch (error) {
-		return res.status(400).json({ message: error.message })
+		return res.status(500).json({ message: error.message })
 	}
 }
 
@@ -160,6 +170,10 @@ export const deleteBooking = async (req, res) => {
 			return res.status(404).json({ message: `Booking Id : ${id} not found.` })
 		}
 		await BookingModel.deleteOne({ _id: id })
+		const userCart = await CartModel.findOne({ user: booking.user })
+		const updatedCart = userCart.bookings.filter((booking) => booking != id)
+		userCart.bookings = updatedCart
+		await userCart.save()
 		return res
 			.status(200)
 			.json({ message: `Booking with Id : ${id} successfully deleted.` })
