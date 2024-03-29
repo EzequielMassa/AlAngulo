@@ -33,10 +33,17 @@ const cartSchema = new Schema(
 cartSchema.methods.getCartTotal = async function () {
     try {
         const bookings = await this.model('Booking').find({ _id: { $in: this.bookings } }).populate('soccerField');
+		const orders = await this.model('Order').find({ _id: { $in: this.orders } }).populate('product');
         let total = 0;
         for (const booking of bookings) {
             if (booking.soccerField) {
                 total += booking.soccerField.price;
+            }
+        }
+		for (const order of orders) {
+            if (order.product) {
+				let subTotal = order.quantity * order.product.price
+                total += subTotal;
             }
         }
         this.total = total;
