@@ -30,12 +30,21 @@ const cartSchema = new Schema(
 	}
 )
 
-cartSchema.methods.getCartTotal = function () {
-	const bookingsSubtotal = this.bookings.map(
-		(booking) => booking.soccerField.price
-	)
-	const bookingsTotal = bookingsSubtotal.reduce((a, b) => a + b, 0)
-	this.total = bookingsTotal
-}
+cartSchema.methods.getCartTotal = async function () {
+    try {
+        const bookings = await this.model('Booking').find({ _id: { $in: this.bookings } }).populate('soccerField');
+        let total = 0;
+        for (const booking of bookings) {
+            if (booking.soccerField) {
+                total += booking.soccerField.price;
+            }
+        }
+        this.total = total;
+        await this.save();
+    } catch (error) {
+        throw new Error(error.message);
+    }
+};
+
 
 export const CartModel = model('Cart', cartSchema)
