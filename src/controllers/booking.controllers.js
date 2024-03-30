@@ -5,7 +5,6 @@ import { SoccerFieldModel } from '../models/SoccerField.model.js'
 import { UserModel } from '../models/User.model.js'
 import { dateRegEx } from '../utils/dateRegEx.js'
 import { soccerFieldAvailableHours } from '../utils/soccerFieldAvailableHours.js'
-import { getUserCart } from './cart.controller.js'
 
 export const getAllBookings = async (req, res) => {
 	try {
@@ -102,7 +101,7 @@ export const createBooking = async (req, res) => {
 			return res.status(400).json({ message: 'Hour already taken' })
 		}
 
-		const reserva = await BookingModel.create({
+		const booking = await BookingModel.create({
 			user: user._id,
 			soccerField: soccerField._id,
 			time,
@@ -123,11 +122,11 @@ export const createBooking = async (req, res) => {
 				.json({ message: `User with Id : ${user} not found` })
 		}
 
-		userCart.bookings.push(reserva._id)
+		userCart.bookings.push(booking._id)
 		await userCart.save()
 		userCart.getCartTotal()
 
-		return res.status(201).json(reserva)
+		return res.status(201).json({ data: booking })
 	} catch (error) {
 		return res.status(500).json({ message: error.message })
 	}
@@ -149,7 +148,7 @@ export const getAvailableHours = async (req, res) => {
 	} catch (error) {
 		return res.status(404).json({
 			message:
-				'No hemos podido encontrar los horarios con los datos proporcionados',
+				'We have not been able to find the schedules with the data provided',
 		})
 	}
 }
@@ -160,12 +159,12 @@ const getSoccerFieldAvailableHours = async (soccerfieldId, date) => {
 			date: date,
 			soccerField: soccerfieldId,
 		})
-		const horasNoDisponibles = soccerFieldDayBooking.map(
+		const notAvailableHours = soccerFieldDayBooking.map(
 			(booking) => booking.time
 		)
 
 		const result = soccerFieldAvailableHours.filter((hour) => {
-			for (let time of horasNoDisponibles) {
+			for (let time of notAvailableHours) {
 				if (time == hour) {
 					return false
 				}
@@ -188,12 +187,10 @@ export const deleteBooking = async (req, res) => {
 		}
 		await BookingModel.deleteOne({ _id: id })
 		const userCart = await CartModel.findOne({ user: booking.user })
-		// Remover la reserva del carrito
 		userCart.bookings = userCart.bookings.filter(
 			(bookingId) => bookingId.toString() !== id
 		)
 		await userCart.save()
-		// Recalcular el precio total después de eliminar la reserva
 		userCart.getCartTotal()
 		return res
 			.status(200)
