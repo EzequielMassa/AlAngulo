@@ -7,14 +7,14 @@ import {
 	getSoccerFieldById,
 	updateSoccerField,
 } from '../controllers/soccerField.controllers.js'
-
+import { verifyToken,isAdmin } from '../middlewares/authJwt.js'
 const router = Router()
 
 router.get('/soccerfields', getAllSoccerFields)
 router.get('/soccerfield/:id', getSoccerFieldById)
 router.get('/soccerfields/query', getAllSoccerFieldsByQuery)
-router.post('/soccerfield', createSoccerField)
-router.put('/soccerfield/update/:id', updateSoccerField)
-router.delete('/soccerfield/delete/:id', deleteSoccerField)
+router.post('/soccerfield',[verifyToken,isAdmin], createSoccerField)
+router.put('/soccerfield/update/:id', [verifyToken,isAdmin] ,updateSoccerField)
+router.delete('/soccerfield/delete/:id', [verifyToken,isAdmin] ,deleteSoccerField)
 
 export default router

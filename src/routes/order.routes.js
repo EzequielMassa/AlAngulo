@@ -9,8 +9,9 @@ import {
 } from '../controllers/order.controller.js'
 
 const router = Router()
+import { verifyToken,isAdmin } from '../middlewares/authJwt.js'
 
-router.get('/orders', getAllOrders)
+router.get('/orders',[verifyToken,isAdmin], getAllOrders)
 router.post('/orders', createOrder)
 router.get('/orders/:id', getOrderById)
 router.delete('/orders/delete/:id', deleteOrder)

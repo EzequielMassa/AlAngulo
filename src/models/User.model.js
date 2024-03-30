@@ -43,6 +43,7 @@ const userSchema = new  Schema(
         phone:{
             type: String,
 			required: true,
+            unique:true,
             minLength: 10,
 			maxLength: 15,
             match: [
@@ -76,34 +77,20 @@ const userSchema = new  Schema(
     
     
     
-       , role:{
-            type: String,
-            enum:{
-                values:['user','admin'],
-                message:`{VALUE} no esta definido`,
-                default:'user',
-                lowercase: true
-            } 
-        }
+       , roles:[
+       {
+        type: Schema.Types.ObjectId,
+        ref: "Role",
+       }
+       ]
     ,
+    //para que el admin administre sus permisos como usuario
     
         active:{
             type:Boolean,
             default:true
         }
-    ,
     
-        orders:{
-            type: [Schema.Types.ObjectId],
-			   ref: 'Orders',
-        }
-    ,
-    
-    
-        booking:{
-         type: [Schema.Types.ObjectId],
-			ref: 'Bookings',
-        }
     
 	
 	},
@@ -113,5 +100,6 @@ const userSchema = new  Schema(
     }
 	
 )
+
 
 export const UserModel = model('User', userSchema)
