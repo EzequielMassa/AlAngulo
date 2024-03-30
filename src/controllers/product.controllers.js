@@ -4,7 +4,7 @@ import { ProductModel } from '../models/Product.models.js'
 export const getAllProducts = async (req, res) => {
 	try {
 		const products = await ProductModel.find().populate({
-			path: 'categories',
+			path: 'categorie',
 			select: 'name',
 		})
 		return res.status(200).json(products)
