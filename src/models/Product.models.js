@@ -19,21 +19,21 @@ const productSchema = new Schema(
 		category: {
 			type: Schema.Types.ObjectId,
 			ref: 'Category',
-			// required: true,
+			required: true,
 		},
 		price: {
 			type: Number,
 			required: true,
-			min: [1, 'El precio minimo es de $1, se ingreso ${VALUE}'],
+			min: [1, 'The min price is 1 , and you enter ${VALUE}'],
 			default: 1,
 		},
 		image: {
 			type: String,
 			match: [
 				/^.*\.(jpg|jpeg|png|gif|bmp)$/i,
-				'Ingrese una ruta de imagen valida',
+				'Please provide a valid image path',
 			],
-			default: 'agregar logo',
+			default: 'https://i.imgur.com/I03y2Ec.png',
 		},
 	},
 	{

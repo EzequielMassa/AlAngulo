@@ -8,18 +8,18 @@ const orderSchema = new Schema(
 		product: {
 			type: Schema.Types.ObjectId,
 			ref: 'Product',
-			// required: true,
+			required: true,
 		},
 		user: {
 			type: Schema.Types.ObjectId,
 			ref: 'User',
 			required: true,
 		},
-		quantity : {
+		quantity: {
 			type: Number,
-			default : 1,
-			required : [true, 'the quantity is required'],
-		}
+			default: 1,
+			required: [true, 'the quantity is required'],
+		},
 	},
 	{
 		timestamps: true,
