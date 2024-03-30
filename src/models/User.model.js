@@ -43,6 +43,7 @@ const userSchema = new  Schema(
         phone:{
             type: String,
 			required: true,
+            unique:true,
             minLength: 10,
 			maxLength: 15,
             match: [

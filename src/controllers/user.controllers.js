@@ -2,7 +2,7 @@ import { UserModel } from "../models/User.model.js";
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
 import RoleModel from "../models/Role.model.js";
-import { populate } from "dotenv";
+
 
 //controlador para traer todos los usuarios
 export const getUsers = async (req,res)=>{
@@ -18,15 +18,8 @@ export const getUser = async(req,res) =>{
     const {id} = req.params
     try {
         const user = await UserModel.findById(id)
-        .populate('orders'
-			// path: 'orders',
-			// select: {product , orderDate , user},
-		)
-        .populate(
-           'bookings'
-            // path:'bookings',
-            // select:{soccerField , time , date}
-        )
+        
+        
         return res.status(200).json(user)
     } catch (error) {
         return res.status(404).json({ message: 'no pudimos encontrar el usuario solicitado' })
@@ -55,7 +48,8 @@ export const createUser = async (req, res) => {
         lastname,
         email,
         phone,
-        password:passwordHash
+        password:passwordHash,
+        roles
       });
   
       // checking for roles
@@ -72,7 +66,7 @@ export const createUser = async (req, res) => {
   
       // Create a token
       const token = jwt.sign({ id: savedUser._id,
-    name:savedUser.name,lastname:savedUser.lastname,email:savedUser.email,phone:savedUser.phone }, process.env.SECRET_KEY , {
+    name:savedUser.name,lastname:savedUser.lastname,email:savedUser.email,phone:savedUser.phone,roles:savedUser.roles }, process.env.SECRET_KEY , {
         expiresIn: 86400, // 24 hours
       });
   

@@ -1,6 +1,8 @@
 import RoleModel from "../models/Role.model.js";
 import { UserModel } from "../models/User.model.js";
 import jwt from "jsonwebtoken"
+
+
 export const verifyToken = async (req, res, next) => {
     let token = req.headers["x-access-token"];
   
@@ -18,7 +20,9 @@ export const verifyToken = async (req, res, next) => {
       return res.status(401).json({ message: "Unauthorized!" });
     }
   };
-export const isAdmin = async (req, res, next) => {
+ 
+ 
+ export const isAdmin = async (req, res, next) => {
     try {
       const user = await UserModel.findById(req.userId);
       const roles = await RoleModel.find({ _id: { $in: user.roles } });

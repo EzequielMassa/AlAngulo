@@ -6,9 +6,9 @@ import orderRoutes from './routes/order.routes.js'
 import ProductRoutes from './routes/product.routes.js'
 import SoccerFieldRoutes from './routes/soccerField.routes.js'
 import router from './routes/user.routes.js'
-import { createRoles } from './utils/initialRoles.js'
+
 const app = express()
-createRoles()
+
 app.use(express.json())
 app.use(morgan('dev'))
 app.use(cors())
