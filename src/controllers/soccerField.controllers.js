@@ -38,7 +38,6 @@ export const getAllSoccerFieldsByQuery = async (req, res) => {
 		} else if (size) {
 			soccerFields = await SoccerFieldModel.find({ size: size })
 		}
-		// const soccerField = await SoccerFieldModel.find({ grass: grass })
 		return res.status(200).json({ data: soccerFields })
 	} catch (error) {
 		return res.status(500).json({ message: error.message })
@@ -48,9 +47,9 @@ export const getAllSoccerFieldsByQuery = async (req, res) => {
 export const createSoccerField = async (req, res) => {
 	try {
 		const newSoccerField = await SoccerFieldModel.create({ ...req.body })
-		return res.status(201).json(newSoccerField)
+		return res.status(201).json({ data: newSoccerField })
 	} catch (error) {
-		return res.status(400).json({ message: error.message })
+		return res.status(500).json({ message: error.message })
 	}
 }
 
@@ -62,9 +61,9 @@ export const updateSoccerField = async (req, res) => {
 			return res.status(404).json({ message: 'Soccerfield not found' })
 		soccerField.set(req.body)
 		await soccerField.save()
-		res.status(200).json(soccerField)
+		res.status(200).json({ data: soccerField })
 	} catch (error) {
-		return res.status(400).json({ message: error.message })
+		return res.status(500).json({ message: error.message })
 	}
 }
 

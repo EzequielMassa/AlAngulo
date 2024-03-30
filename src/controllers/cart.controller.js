@@ -29,3 +29,5 @@ export const getUserCart = async (req, res) => {
 		res.status(500).json({ message: error.message })
 	}
 }
+
+//TODO: hacer logica de limpiar cart

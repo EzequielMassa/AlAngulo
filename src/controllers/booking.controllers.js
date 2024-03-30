@@ -199,3 +199,5 @@ export const deleteBooking = async (req, res) => {
 		res.status(500).json({ message: error.message })
 	}
 }
+
+//TODO: comprobar fechas anteriores y formato de fechas en getAvailableHours
