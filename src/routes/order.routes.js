@@ -1,22 +1,17 @@
 import { Router } from 'express'
 import {
-	
-	getAllOrders,
 	createOrder,
-	getOrderById,
 	deleteOrder,
-	
+	getAllOrders,
+	getOrderById,
 } from '../controllers/order.controller.js'
+import { isAdmin, verifyToken } from '../middlewares/authJwt.js'
 
 const router = Router()
-import { verifyToken,isAdmin } from '../middlewares/authJwt.js'
 
-router.get('/orders',[verifyToken,isAdmin], getAllOrders)
+router.get('/orders', [verifyToken, isAdmin], getAllOrders)
 router.post('/orders', createOrder)
-router.get('/orders/:id', getOrderById)
-router.delete('/orders/delete/:id', deleteOrder)
-// router.put('/product/update/:id', updateProduct)
-// router.get('/products/category/:category', getProductByCategory)
-// router.get('/products/price/:sortOrder', getProductsSortedByPrice)
+router.get('/order/:id', getOrderById)
+router.delete('/order/delete/:id', deleteOrder)
 
 export default router

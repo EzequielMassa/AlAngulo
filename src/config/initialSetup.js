@@ -1,5 +1,6 @@
-import { SoccerFieldModel } from '../models/SoccerField.model.js'
+import { CategoryModel } from '../models/Category.model.js'
 import { ProductModel } from '../models/Product.models.js'
+import { SoccerFieldModel } from '../models/SoccerField.model.js'
 
 export const createSoccerFields = async () => {
 	try {
@@ -7,7 +8,7 @@ export const createSoccerFields = async () => {
 
 		if (count > 0) return
 
-		const values = await Promise.all([
+		await Promise.all([
 			new SoccerFieldModel({
 				name: 'La mundialista',
 				description: 'Cancha en honor a los campeones del mundo',
@@ -40,27 +41,56 @@ export const createProducts = async () => {
 
 		if (count > 0) return
 
-		const values = await Promise.all([
+		const tshirtCategory = await CategoryModel.findOne({ name: 'Remeras' })
+		const soccerBallCategory = await CategoryModel.findOne({ name: 'Pelotas' })
+
+		await Promise.all([
 			new ProductModel({
 				name: 'Casaca AlAngulo',
 				description: 'Camiseta del club con logo de Alngulo',
-				// categorie: 'Camiseta',
+				category: tshirtCategory._id,
 				price: 7500,
-				image: 'imagen.jpg'
 			}).save(),
 			new ProductModel({
 				name: 'Casaca AlAngulo Alternativa',
 				description: 'Camiseta del club con logo de Alngulo',
-				// categorie: 'Camiseta',
+				category: tshirtCategory._id,
 				price: 8500,
-				image: 'imagen2.jpg'
 			}).save(),
 			new ProductModel({
 				name: 'Pelota AlAngulo',
 				description: 'Pelota del club con logo de Alngulo',
-				// categorie: 'Pelotas',
+				category: soccerBallCategory._id,
 				price: 35500,
-				image: 'imagen3.jpg'
+			}).save(),
+		])
+	} catch (error) {
+		console.error(error)
+	}
+}
+
+export const createDefaultCategories = async () => {
+	try {
+		const count = await CategoryModel.estimatedDocumentCount()
+
+		if (count > 0) return
+
+		await Promise.all([
+			new CategoryModel({
+				name: 'Remeras',
+				description: 'Las mejores remeras futboleras de AlAngulo',
+			}).save(),
+			new CategoryModel({
+				name: 'Pelotas',
+				description: 'Las mejores pelotas futboleras de AlAngulo',
+			}).save(),
+			new CategoryModel({
+				name: 'Tazas',
+				description: 'Las mejores tazas futboleras de AlAngulo',
+			}).save(),
+			new CategoryModel({
+				name: 'Bebidas',
+				description: 'Las mejores bebidas de AlAngulo',
 			}).save(),
 		])
 	} catch (error) {
