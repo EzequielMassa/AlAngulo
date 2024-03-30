@@ -10,6 +10,11 @@ export const getUserCart = async (req, res) => {
 				populate: { path: 'soccerField', select: '-createdAt -updatedAt' },
 				select: '-user -createdAt -updatedAt',
 			})
+			.populate({
+				path: 'orders',
+				populate: { path: 'product', select: '-createdAt -updatedAt' },
+				select: '-user -createdAt -updatedAt',
+			})
 			.select('-createdAt -updatedAt')
 
 		if (!userCart) {

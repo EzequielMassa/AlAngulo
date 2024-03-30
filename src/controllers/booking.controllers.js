@@ -75,55 +75,63 @@ export const getBookingById = async (req, res) => {
 }
 
 export const createBooking = async (req, res) => {
-    try {
-        const user = await UserModel.findById(req.body.user);
-        const soccerField = await SoccerFieldModel.findById(req.body.soccerField);
-        const time = req.body.time;
-        const date = req.body.date;
-        const availableHours = await getSoccerFieldAvailableHours(req.body.soccerField, date);
+	try {
+		const user = await UserModel.findById(req.body.user)
+		const soccerField = await SoccerFieldModel.findById(req.body.soccerField)
+		const time = req.body.time
+		const date = req.body.date
+		const availableHours = await getSoccerFieldAvailableHours(
+			req.body.soccerField,
+			date
+		)
 
-        if (!user) return res.status(404).json({ message: 'User not found' });
-        if (!soccerField) return res.status(404).json({ message: 'Soccerfield not found' });
-        if (!time) return res.status(400).json({ message: 'The time is required' });
+		if (!user) return res.status(404).json({ message: 'User not found' })
+		if (!soccerField)
+			return res.status(404).json({ message: 'Soccerfield not found' })
+		if (!time) return res.status(400).json({ message: 'The time is required' })
 
-        const regExTime = /^([01]\d|2[0-3]):00$/;
-        if (!regExTime.test(time)) {
-            return res.status(400).json({ message: 'Incorrect time format, must be HH:00' });
-        }
+		const regExTime = /^([01]\d|2[0-3]):00$/
+		if (!regExTime.test(time)) {
+			return res
+				.status(400)
+				.json({ message: 'Incorrect time format, must be HH:00' })
+		}
 
-        const bookingAlreadyExist = availableHours.find((hour) => hour === time);
-        if (!bookingAlreadyExist) {
-            return res.status(400).json({ message: 'Hour already taken' });
-        }
+		const bookingAlreadyExist = availableHours.find((hour) => hour === time)
+		if (!bookingAlreadyExist) {
+			return res.status(400).json({ message: 'Hour already taken' })
+		}
 
-        const reserva = await BookingModel.create({
-            user: user._id,
-            soccerField: soccerField._id,
-            time,
-            date,
-        });
+		const reserva = await BookingModel.create({
+			user: user._id,
+			soccerField: soccerField._id,
+			time,
+			date,
+		})
 
-        const userCart = await CartModel.findOne({ user: user })
-            .populate({
-                path: 'bookings',
-                populate: { path: 'soccerField', select: '-createdAt -updatedAt' },
-                select: '-user -createdAt -updatedAt',
-            })
-            .select('-createdAt -updatedAt');
+		const userCart = await CartModel.findOne({ user: user })
+			.populate({
+				path: 'bookings',
+				populate: { path: 'soccerField', select: '-createdAt -updatedAt' },
+				select: '-user -createdAt -updatedAt',
+			})
+			.select('-createdAt -updatedAt')
 
-        if (!userCart) {
-            return res.status(404).json({ message: `User with Id : ${user} not found` });
-        }
+		if (!userCart) {
+			return res
+				.status(404)
+				.json({ message: `User with Id : ${user} not found` })
+		}
 
-        userCart.bookings.push(reserva._id);
-        await userCart.save(); 
-        userCart.getCartTotal();
+		userCart.bookings.push(reserva._id)
+		await userCart.save()
+		userCart.getCartTotal()
 
-        return res.status(201).json(reserva);
-    } catch (error) {
-        return res.status(500).json({ message: error.message });
-    }
-};
+		return res.status(201).json(reserva)
+	} catch (error) {
+		return res.status(500).json({ message: error.message })
+	}
+}
 
 export const getAvailableHours = async (req, res) => {
 	const { soccerfield, date } = req.query
@@ -181,7 +189,9 @@ export const deleteBooking = async (req, res) => {
 		await BookingModel.deleteOne({ _id: id })
 		const userCart = await CartModel.findOne({ user: booking.user })
 		// Remover la reserva del carrito
-		userCart.bookings = userCart.bookings.filter(bookingId => bookingId.toString() !== id)
+		userCart.bookings = userCart.bookings.filter(
+			(bookingId) => bookingId.toString() !== id
+		)
 		await userCart.save()
 		// Recalcular el precio total después de eliminar la reserva
 		userCart.getCartTotal()
@@ -192,4 +202,3 @@ export const deleteBooking = async (req, res) => {
 		res.status(500).json({ message: error.message })
 	}
 }
-

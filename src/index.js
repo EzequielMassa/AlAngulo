@@ -1,15 +1,20 @@
 import app from './app.js'
-import { createRoles } from './utils/initialRoles.js'
 import { PORT } from './config/config.js'
-import { createSoccerFields, createProducts } from './config/initialSetup.js'
+import {
+	createDefaultCategories,
+	createProducts,
+	createSoccerFields,
+} from './config/initialSetup.js'
 import './database/database.js'
+import { createRoles } from './utils/initialRoles.js'
 
 async function main() {
 	await app.listen(PORT, async () => {
 		console.log(`La aplicación esta escuchando en el puerto ${PORT}`)
-		 createRoles()
-     createProducts()
-     createSoccerFields()
+		await createRoles()
+		await createDefaultCategories()
+		await createProducts()
+		await createSoccerFields()
 	})
 }
 

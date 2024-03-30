@@ -4,7 +4,7 @@ import { ProductModel } from '../models/Product.models.js'
 export const getAllProducts = async (req, res) => {
 	try {
 		const products = await ProductModel.find().populate({
-			path: 'categorie',
+			path: 'category',
 			select: 'name',
 		})
 		return res.status(200).json(products)
@@ -15,18 +15,16 @@ export const getAllProducts = async (req, res) => {
 
 export const createProduct = async (req, res) => {
 	try {
-		// const categorie = await CategoryModel.findOne({
-		// 	nombre: req.body.categoria,
-		// })
+		const productCategory = await CategoryModel.findOne({
+			name: req.body.category,
+		})
 
-		// if (!categorie) throw new Error('no existe esa categoria')
-		// res.send(categorie)
-		// console.log(categorie)
+		if (!productCategory)
+			return res.status(404).json({ message: 'Category not found' })
 		const newProduct = await ProductModel.create({ ...req.body })
-		return res.status(201).json(newProduct)
+		return res.status(201).json({ data: newProduct })
 	} catch (error) {
-		console.log(error)
-		return res.status(400).json({ message: error.message })
+		return res.status(500).json({ message: error.message })
 	}
 }
 
@@ -56,6 +54,7 @@ export const getProductByCategory = async (req, res) => {
 
 export const getProductsSortedByPrice = async (req, res) => {
 	const { sortOrder } = req.query
+	if (!sortOrder) return res.status(400).json({ message: 'no query found' })
 	try {
 		const sortedProductsByPrice = await ProductModel.find().sort({
 			price: sortOrder,
