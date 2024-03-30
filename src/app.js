@@ -7,6 +7,7 @@ import orderRoutes from './routes/order.routes.js'
 import ProductRoutes from './routes/product.routes.js'
 import SoccerFieldRoutes from './routes/soccerField.routes.js'
 import router from './routes/user.routes.js'
+import CategoryRoutes from './routes/category.routes.js'
 
 const app = express()
 
@@ -19,6 +20,7 @@ app.use('/api', BookingRoutes)
 app.use('/api', SoccerFieldRoutes)
 app.use('/api', ProductRoutes)
 app.use('/api', router)
+app.use('/api', CategoryRoutes)
 
 
 export default app
