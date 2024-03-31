@@ -139,6 +139,24 @@ export const getAvailableHours = async (req, res) => {
 			.status(400)
 			.json({ message: 'soccerfield and date query not found' })
 	}
+	if (!dateRegEx.test(date)) {
+		return res
+			.status(400)
+			.json({ message: 'Incorrect date format , must be YYYY-mm-dd' })
+	}
+
+	const queryToDate = new Date(date)
+	const today = new Date()
+	today.setUTCHours(0)
+	today.setUTCMinutes(0)
+	today.setUTCSeconds(0)
+	today.setUTCMilliseconds(0)
+	today.setDate(today.getDate() - 1)
+	if (queryToDate < today) {
+		return res
+			.status(400)
+			.json({ message: 'The date  cannot be before the current date ' })
+	}
 	try {
 		const soccerFieldbookings = await getSoccerFieldAvailableHours(
 			soccerfield,
@@ -199,5 +217,3 @@ export const deleteBooking = async (req, res) => {
 		res.status(500).json({ message: error.message })
 	}
 }
-
-//TODO: comprobar fechas anteriores y formato de fechas en getAvailableHours
