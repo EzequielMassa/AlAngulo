@@ -12,7 +12,7 @@ export const getAllOrders = async (req, res) => {
 
 		return res.status(200).json({ data: order })
 	} catch (error) {
-		return res.status(404).json({ message: error.message })
+		return res.status(500).json({ message: error.message })
 	}
 }
 
@@ -53,7 +53,7 @@ export const createOrder = async (req, res) => {
 		userCart.orders.push(order._id)
 		await userCart.save()
 		userCart.getCartTotal()
-		res.status(201).json(order)
+		res.status(201).json({ data: order })
 	} catch (error) {
 		return res.status(500).json({ message: error.message })
 	}
@@ -62,11 +62,10 @@ export const getOrderById = async (req, res) => {
 	const { id } = req.params
 	try {
 		const orderFound = await OrderModel.findById(id)
-		return res.status(200).json(orderFound)
+		if (!orderFound) return res.status(404).json({ message: 'Order not found' })
+		return res.status(200).json({ data: orderFound })
 	} catch (error) {
-		return res
-			.status(404)
-			.json({ message: 'We could not find the requested product' })
+		return res.status(500).json({ message: error.message })
 	}
 }
 export const deleteOrder = async (req, res) => {

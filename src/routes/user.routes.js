@@ -16,7 +16,7 @@ import {
 const router = Router()
 router.get('/user/:id', getUser)
 router.get('/users', [verifyToken, isAdmin], getUsers)
-router.get('/userEmail/:email', getUserEmail)
+router.get('/user/email/:email', getUserEmail)
 router.post('/register', [checkExistingUser, checkExistingRole], createUser)
 router.delete('/user/:id', [verifyToken, isAdmin], deleteUser)
 router.put('/user/:id', [verifyToken, isAdmin], updateUser)

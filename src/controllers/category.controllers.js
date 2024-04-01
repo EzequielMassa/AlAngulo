@@ -30,11 +30,9 @@ export const deleteCategory = async (req, res) => {
 			return res.status(404).json({ message: 'Category not found' })
 		}
 		await CategoryModel.deleteOne({ _id: id })
-		return res
-			.status(200)
-			.json({
-				message: `Category with name ${categoryFound.name} was successfully deleted`,
-			})
+		return res.status(200).json({
+			message: `Category with name ${categoryFound.name} was successfully deleted`,
+		})
 	} catch (error) {
 		res.status(500).json({ message: error.message })
 	}
@@ -43,13 +41,15 @@ export const deleteCategory = async (req, res) => {
 export const updateCategory = async (req, res) => {
 	try {
 		const { id } = req.params
-		const { name, description } = req.body
+		const { description } = req.body
 		const categoryFound = await CategoryModel.findById(id)
 		const categoryOld = categoryFound.name
 		if (!categoryFound) {
 			return res.status(404).json({ message: 'Category not found' })
 		}
-		categoryFound.set({ name: name, description: description })
+		if (!description)
+			return res.status(400).json({ message: 'the description is not defined' })
+		categoryFound.set({ description: description })
 		await categoryFound.save()
 		return res
 			.status(200)
