@@ -40,6 +40,12 @@ export const getUserEmail = async (req, res) => {
 export const createUser = async (req, res) => {
 	try {
 		const { name, lastname, email, phone, password, roles } = req.body
+		if (!password)
+			return res.status(400).json({ message: 'The password is required' })
+		if (password.length < 8)
+			return res
+				.status(400)
+				.json({ message: 'The password must have at least 8 characters long' })
 		const salt = await bcrypt.genSalt(10)
 		const passwordHash = await bcrypt.hash(password, salt)
 		const newUser = new UserModel({

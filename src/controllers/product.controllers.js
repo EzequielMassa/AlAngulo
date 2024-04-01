@@ -1,3 +1,4 @@
+import { CategoryModel } from '../models/Category.model.js'
 import { ProductModel } from '../models/Product.models.js'
 
 export const getAllProducts = async (req, res) => {
@@ -20,7 +21,10 @@ export const createProduct = async (req, res) => {
 
 		if (!productCategory)
 			return res.status(404).json({ message: 'Category not found' })
-		const newProduct = await ProductModel.create({ ...req.body })
+		const newProduct = await ProductModel.create({
+			...req.body,
+			category: productCategory._id,
+		})
 		return res.status(201).json({ data: newProduct })
 	} catch (error) {
 		return res.status(500).json({ message: error.message })
@@ -31,6 +35,8 @@ export const getProductById = async (req, res) => {
 	const { id } = req.params
 	try {
 		const productFound = await ProductModel.findById(id)
+		if (!productFound)
+			return res.status(404).json({ message: 'Product not found' })
 		return res.status(200).json({ data: productFound })
 	} catch (error) {
 		return res
