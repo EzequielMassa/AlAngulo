@@ -1,5 +1,6 @@
 import { CartModel } from '../models/Cart.model.js'
 import { ProductModel } from '../models/Product.models.js'
+import RoleModel from '../models/Role.model.js'
 import { UserModel } from '../models/User.model.js'
 import { OrderModel } from '../models/order.model.js'
 
@@ -20,7 +21,13 @@ export const createOrder = async (req, res) => {
 	try {
 		const user = await UserModel.findById(req.body.user)
 		if (!user) return res.status(404).json({ message: 'user not found' })
-
+		const userRole = await RoleModel.find({ _id: user.roles })
+		const userRoleName = userRole[0].name
+		if (userRoleName == 'admin') {
+			return res
+				.status(400)
+				.json({ message: 'The admin cannot create an order' })
+		}
 		const product = await ProductModel.findById(req.body.product)
 		if (!product) return res.status(404).json({ message: 'product not found' })
 

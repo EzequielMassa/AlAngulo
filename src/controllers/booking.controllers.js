@@ -1,6 +1,7 @@
 import { Error } from 'mongoose'
 import { BookingModel } from '../models/Booking.model.js'
 import { CartModel } from '../models/Cart.model.js'
+import RoleModel from '../models/Role.model.js'
 import { SoccerFieldModel } from '../models/SoccerField.model.js'
 import { UserModel } from '../models/User.model.js'
 import { dateRegEx } from '../utils/dateRegEx.js'
@@ -76,6 +77,13 @@ export const getBookingById = async (req, res) => {
 export const createBooking = async (req, res) => {
 	try {
 		const user = await UserModel.findById(req.body.user)
+		const userRole = await RoleModel.find({ _id: user.roles })
+		const userRoleName = userRole[0].name
+		if (userRoleName == 'admin') {
+			return res
+				.status(400)
+				.json({ message: 'The admin cannot create a booking' })
+		}
 		const soccerField = await SoccerFieldModel.findById(req.body.soccerField)
 		const time = req.body.time
 		const date = req.body.date
