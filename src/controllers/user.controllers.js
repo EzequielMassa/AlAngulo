@@ -154,3 +154,23 @@ export const login = async (req, res) => {
 		res.status(400).json({ message: error.message })
 	}
 }
+export const handleUserState = async(req,res)=>{
+	const {id} = req.params
+	const {active} = req.body
+	
+	try {
+		if(typeof active !== "boolean") {
+			return res.status(400).json({message:`${active} is not a valid input`})
+		}
+		const user = await UserModel.findById(id)
+		if(!user){
+			return res.status(400).json({message:"user do not exist"})
+		}
+
+		user.active = active
+		user.save()
+		return res.status(200).json({message:`user stated changed to ${active}`})
+	} catch (error) {
+		return res.status(500).json({message:error.message})
+	}
+}

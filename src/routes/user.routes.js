@@ -7,6 +7,7 @@ import {
 	getUsers,
 	login,
 	updateUser,
+	handleUserState
 } from '../controllers/user.controllers.js'
 import { isAdmin, verifyToken } from '../middlewares/authJwt.js'
 import {
@@ -21,4 +22,5 @@ router.post('/register', [checkExistingUser, checkExistingRole], createUser)
 router.delete('/user/:id', [verifyToken, isAdmin], deleteUser)
 router.put('/user/:id', [verifyToken, isAdmin], updateUser)
 router.post('/login', login)
+router.put('/user/changeState/:id', [verifyToken, isAdmin],handleUserState)
 export default router
