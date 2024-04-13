@@ -6,7 +6,10 @@ import { UserModel } from '../models/User.model.js'
 
 export const getUsers = async (req, res) => {
 	try {
-		const users = await UserModel.find()
+		const users = await UserModel.find().populate({
+			path: 'roles',
+			select: '-createdAt -updatedAt -_id',
+		})
 		res.status(200).json({ data: users })
 	} catch (error) {
 		return res.status(404).json({ message: error.message })
@@ -16,7 +19,10 @@ export const getUsers = async (req, res) => {
 export const getUser = async (req, res) => {
 	const { id } = req.params
 	try {
-		const user = await UserModel.findById(id)
+		const user = await UserModel.findById(id).populate({
+			path: 'roles',
+			select: '-createdAt -updatedAt -_id',
+		})
 		if (!user) return res.status(404).json({ message: 'User not found' })
 		return res.status(200).json({ data: user })
 	} catch (error) {
@@ -82,7 +88,7 @@ export const createUser = async (req, res) => {
 			},
 			process.env.SECRET_KEY,
 			{
-				expiresIn: 86400, // 24 hours
+				expiresIn: 86400,
 			}
 		)
 
@@ -154,23 +160,23 @@ export const login = async (req, res) => {
 		res.status(400).json({ message: error.message })
 	}
 }
-export const handleUserState = async(req,res)=>{
-	const {id} = req.params
-	const {active} = req.body
-	
+export const handleUserState = async (req, res) => {
+	const { id } = req.params
+	const { active } = req.body
+
 	try {
-		if(typeof active !== "boolean") {
-			return res.status(400).json({message:`${active} is not a valid input`})
+		if (typeof active !== 'boolean') {
+			return res.status(400).json({ message: `${active} is not a valid input` })
 		}
 		const user = await UserModel.findById(id)
-		if(!user){
-			return res.status(400).json({message:"user do not exist"})
+		if (!user) {
+			return res.status(400).json({ message: 'user do not exist' })
 		}
 
 		user.active = active
 		user.save()
-		return res.status(200).json({message:`user stated changed to ${active}`})
+		return res.status(200).json({ message: `user stated changed to ${active}` })
 	} catch (error) {
-		return res.status(500).json({message:error.message})
+		return res.status(500).json({ message: error.message })
 	}
 }
