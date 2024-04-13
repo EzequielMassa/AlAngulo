@@ -14,8 +14,8 @@ export const getAllCategories = async (req, res) => {
 
 export const createCategory = async (req, res) => {
 	try {
-		const { name, description } = req.body
-		const newCategory = await CategoryModel.create({ name, description })
+		const { name, description, image } = req.body
+		const newCategory = await CategoryModel.create({ name, description, image })
 		return res.status(201).json({ data: newCategory })
 	} catch (error) {
 		return res.status(500).json({ message: error.message })

@@ -17,6 +17,14 @@ const CategorySchema = new Schema(
 			],
 			maxLength: [500, 'The field description must be 500 characters maximum'],
 		},
+		image: {
+			type: String,
+			match: [
+				/^.*\.(jpg|jpeg|png|gif|bmp)$/i,
+				'Please provide a valid image path',
+			],
+			default: 'https://i.imgur.com/isEp9jy.png',
+		},
 	},
 	{
 		versionKey: false,
