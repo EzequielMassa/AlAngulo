@@ -43,25 +43,92 @@ export const createProducts = async () => {
 
 		const tshirtCategory = await CategoryModel.findOne({ name: 'Remeras' })
 		const soccerBallCategory = await CategoryModel.findOne({ name: 'Pelotas' })
+		const drinksCategory = await CategoryModel.findOne({name: 'Bebidas'})
 
 		await Promise.all([
 			new ProductModel({
-				name: 'Casaca AlAngulo',
-				description: 'Camiseta del club con logo de Alngulo',
+				name: 'Camiseta AlAngulo Femenina',
+				description: 'Diseñada para destacar en la cancha, nuestra camiseta de fútbol femenino combina estilo y rendimiento. Confeccionada con tejido transpirable que absorbe la humedad, te mantendrá fresca y seca durante todo el juego. Su corte ajustado y femenino ofrece comodidad y libertad de movimiento, mientras que el diseño moderno y dinámico garantiza que te veas tan bien como juegas. Ya sea en el entrenamiento o en el partido, esta camiseta es la elección perfecta para las jugadoras que buscan estilo y funcionalidad en la cancha.',
 				category: tshirtCategory._id,
 				price: 7500,
+				image: 'https://imgur.com/a/dgwOxam',
 			}).save(),
 			new ProductModel({
-				name: 'Casaca AlAngulo Alternativa',
-				description: 'Camiseta del club con logo de Alngulo',
+				name: 'Camiseta AlAngulo Femenina Alt',
+				description: 'Diseñada para destacar en la cancha, nuestra camiseta de fútbol femenino combina estilo y rendimiento. Confeccionada con tejido transpirable que absorbe la humedad, te mantendrá fresca y seca durante todo el juego. Su corte ajustado y femenino ofrece comodidad y libertad de movimiento, mientras que el diseño moderno y dinámico garantiza que te veas tan bien como juegas. Ya sea en el entrenamiento o en el partido, esta camiseta es la elección perfecta para las jugadoras que buscan estilo y funcionalidad en la cancha.',
 				category: tshirtCategory._id,
 				price: 8500,
+				image: 'https://imgur.com/dhHUv2Q',
 			}).save(),
 			new ProductModel({
-				name: 'Pelota AlAngulo',
-				description: 'Pelota del club con logo de Alngulo',
+				name: 'Camiseta AlAngulo Masculino',
+				description: 'Diseñada para potenciar tu rendimiento y estilo. Fabricada con tejido de alta calidad que proporciona ventilación y absorción de humedad, esta camiseta te mantendrá fresco durante los momentos más intensos del partido. Su corte atlético ofrece una silueta dinámica y cómoda, permitiéndote mover con libertad. Con un diseño clásico pero impactante, esta camiseta es la elección ideal para jugadores que buscan destacar en el campo con estilo y funcionalidad incomparables.',
+				category: tshirtCategory._id,
+				price: 8500,
+				image: 'https://imgur.com/iIhg9Ch',
+			}).save(),
+			new ProductModel({
+				name: 'Camiseta AlAngulo Masculino Alt',
+				description: 'Diseñada para potenciar tu rendimiento y estilo. Fabricada con tejido de alta calidad que proporciona ventilación y absorción de humedad, esta camiseta te mantendrá fresco durante los momentos más intensos del partido. Su corte atlético ofrece una silueta dinámica y cómoda, permitiéndote mover con libertad. Con un diseño clásico pero impactante, esta camiseta es la elección ideal para jugadores que buscan destacar en el campo con estilo y funcionalidad incomparables.',
+				category: tshirtCategory._id,
+				price: 10000,
+				image: 'https://imgur.com/YxqFiPe',
+			}).save(),
+			new ProductModel({
+				name: 'Pelota Adidas',
+				description: 'Domina el campo con la pelota de fútbol Adidas, el compañero perfecto para tus entrenamientos y partidos. Diseñada con la más alta tecnología y materiales de calidad, esta pelota ofrece un rendimiento excepcional en cualquier superficie.',
 				category: soccerBallCategory._id,
-				price: 35500,
+				price: 75000,
+				image: 'https://imgur.com/tipfgS4',
+			}).save(),
+			new ProductModel({
+				name: 'Pelota DRB',
+				description: 'Explora nuevos horizontes en el mundo del fútbol con la pelota DRB (Dynamic Response Ball), diseñada para desatar tu máximo potencial en la cancha. Con una combinación innovadora de tecnología y diseño, la DRB ofrece un control excepcional y una respuesta dinámica en cada toque. ',
+				category: soccerBallCategory._id,
+				price: 85000,
+				image: 'https://imgur.com/1enCq8l',
+			}).save(),
+			new ProductModel({
+				name: 'Pelota NRB',
+				description: 'Desata tu pasión por el fútbol con la pelota NRB (Next-Generation Response Ball), diseñada para llevar tu juego al siguiente nivel. Equipada con tecnología de vanguardia y un diseño aerodinámico, la NRB ofrece un rendimiento excepcional en el campo. Su superficie texturizada proporciona un control óptimo, permitiéndote realizar pases precisos y disparos potentes con confianza.',
+				category: soccerBallCategory._id,
+				price: 65000,
+				image: 'https://imgur.com/zHEgEep',
+			}).save(),
+			new ProductModel({
+				name: 'Coca Cola 2 Litros ',
+				description: 'Disfruta de la refrescante y deliciosa experiencia de Coca-Cola en su presentación de 2 litros, ideal para compartir momentos inolvidables con amigos y familiares. Esta icónica bebida, conocida por su sabor único y burbujeante, te brinda la energía necesaria para cualquier ocasión.',
+				category: drinksCategory._id,
+				price: 1500,
+				image: 'https://imgur.com/18eM37M',
+			}).save(),
+			new ProductModel({
+				name: 'Mirinda Manzana 2 Litros ',
+				description: 'Sumergite en el sabor refrescante y natural de la manzana con nuestra Mirinda de Manzana, una explosión de frescura en cada sorbo.',
+				category: drinksCategory._id,
+				price: 1300,
+				image: 'https://imgur.com/yCr3Di7',
+			}).save(),
+			new ProductModel({
+				name: 'Quilmes Rubia 1 Litro ',
+				description: 'Descubre el sabor auténtico de la tradición cervecera argentina con nuestra cerveza Quilmes. Elaborada con los mejores ingredientes y siguiendo rigurosos estándares de calidad, cada sorbo de Quilmes te transporta a las vastas llanuras de Argentina.',
+				category: drinksCategory._id,
+				price: 2300,
+				image: 'https://imgur.com/i06iVYM',
+			}).save(),
+			new ProductModel({
+				name: 'Pepsi 2 Litros ',
+				description: 'Sumérgete en el sabor audaz y refrescante de Pepsi, la icónica bebida que ha deleitado a millones en todo el mundo. Cada sorbo de Pepsi es una explosión de sabor, combinando la dulzura perfecta con un toque de frescura que te deja con ganas de más.',
+				category: drinksCategory._id,
+				price: 1400,
+				image: 'https://imgur.com/jdeK1bJ',
+			}).save(),
+			new ProductModel({
+				name: 'Agua Benedictino 2 Litros ',
+				description: 'Refresca tu cuerpo y mente con el agua mineral natural Benedictino, una opción premium para hidratarte y revitalizarte en cualquier momento del día. Proveniente de fuentes puras y cristalinas, cada gota de Benedictino es una invitación a la pureza y la frescura.',
+				category: drinksCategory._id,
+				price: 1400,
+				image: 'https://imgur.com/4vuztmR',
 			}).save(),
 		])
 	} catch (error) {
