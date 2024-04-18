@@ -12,8 +12,8 @@ const productSchema = new Schema(
 			required: true,
 			minLength: [3, 'the description field must have at least 3 characters'],
 			maxLength: [
-				500,
-				'the description field must have a maximun of 500 characters',
+				800,
+				'the description field must have a maximun of 800 characters',
 			],
 		},
 		category: {
