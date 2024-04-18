@@ -7,7 +7,7 @@ import { UserModel } from '../models/User.model.js'
 export const getUsers = async (req, res) => {
 	try {
 		const users = await UserModel.find().populate({
-			path: 'roles',
+			path: 'role',
 			select: '-createdAt -updatedAt -_id',
 		})
 		res.status(200).json({ data: users })
@@ -20,7 +20,7 @@ export const getUser = async (req, res) => {
 	const { id } = req.params
 	try {
 		const user = await UserModel.findById(id).populate({
-			path: 'roles',
+			path: 'role',
 			select: '-createdAt -updatedAt -_id',
 		})
 		if (!user) return res.status(404).json({ message: 'User not found' })
@@ -45,7 +45,7 @@ export const getUserEmail = async (req, res) => {
 
 export const createUser = async (req, res) => {
 	try {
-		const { name, lastname, email, phone, password, roles } = req.body
+		const { name, lastname, email, phone, password, role } = req.body
 		if (!password)
 			return res.status(400).json({ message: 'The password is required' })
 		if (password.length < 8)
@@ -60,18 +60,21 @@ export const createUser = async (req, res) => {
 			email,
 			phone,
 			password: passwordHash,
-			roles,
+			role,
 		})
 
-		if (roles) {
-			const foundRoles = await RoleModel.find({ name: { $in: roles } })
-			newUser.roles = foundRoles.map((role) => role._id)
+		let tokenRole
+
+		if (role) {
+			const foundRoles = await RoleModel.findOne({ name: role })
+			newUser.role = foundRoles._id
+			tokenRole = foundRoles.name
 		} else {
 			const role = await RoleModel.findOne({ name: 'user' })
-			newUser.roles = [role._id]
+			newUser.role = role._id
+			tokenRole = role.name
 		}
 
-		const tokenRoles = roles ? roles : ['user']
 		const savedUser = await newUser.save()
 
 		await CartModel.create({
@@ -85,7 +88,7 @@ export const createUser = async (req, res) => {
 				lastname: savedUser.lastname,
 				email: savedUser.email,
 				phone: savedUser.phone,
-				roles: tokenRoles[0],
+				role: tokenRole,
 			},
 			process.env.SECRET_KEY,
 			{
@@ -134,7 +137,7 @@ export const login = async (req, res) => {
 			return res.status(400).json({ message: 'Please complete all the fields' })
 		}
 		const user = await UserModel.findOne({ email }).populate({
-			path: 'roles',
+			path: 'role',
 			select: 'name -_id',
 		})
 		if (!user) {
@@ -151,7 +154,7 @@ export const login = async (req, res) => {
 				name: user.name,
 				lastname: user.lastname,
 				phone: user.phone,
-				roles: user.roles,
+				role: user.role.name,
 			},
 			process.env.SECRET_KEY,
 			{ expiresIn: '1D' }

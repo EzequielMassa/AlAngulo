@@ -51,12 +51,10 @@ const userSchema = new Schema(
 			default: '',
 		},
 
-		roles: [
-			{
-				type: Schema.Types.ObjectId,
-				ref: 'Role',
-			},
-		],
+		role: {
+			type: Schema.Types.ObjectId,
+			ref: 'Role',
+		},
 
 		active: {
 			type: Boolean,
