@@ -71,6 +71,7 @@ export const createUser = async (req, res) => {
 			newUser.roles = [role._id]
 		}
 
+		const tokenRoles = roles ? roles : ['user']
 		const savedUser = await newUser.save()
 
 		await CartModel.create({
@@ -84,7 +85,7 @@ export const createUser = async (req, res) => {
 				lastname: savedUser.lastname,
 				email: savedUser.email,
 				phone: savedUser.phone,
-				roles: savedUser.roles,
+				roles: tokenRoles[0],
 			},
 			process.env.SECRET_KEY,
 			{
