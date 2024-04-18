@@ -22,17 +22,14 @@ export const createOrder = async (req, res) => {
 		const user = await UserModel.findById(req.body.user)
 		const userState = user.active
 		if (!user) return res.status(404).json({ message: 'user not found' })
-		
-		const userRole = await RoleModel.find({ _id: user.roles })
-		const userRoleName = userRole[0].name
-		if (userRoleName == 'admin') {
+
+		const userRole = await RoleModel.find({ _id: user.role._id })
+		if (userRole.name == 'admin') {
 			return res
 				.status(400)
 				.json({ message: 'The admin cannot create an order' })
-		}else if( userState === false){
-			return res
-				.status(400)
-				.json({ message: 'You are a suspended user' })
+		} else if (userState === false) {
+			return res.status(400).json({ message: 'You are a suspended user' })
 		}
 		const product = await ProductModel.findById(req.body.product)
 		if (!product) return res.status(404).json({ message: 'product not found' })

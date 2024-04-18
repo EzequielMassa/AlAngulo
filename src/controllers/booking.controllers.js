@@ -78,16 +78,14 @@ export const createBooking = async (req, res) => {
 	try {
 		const user = await UserModel.findById(req.body.user)
 		const userState = user.active
-		const userRole = await RoleModel.find({ _id: user.roles })
-		const userRoleName = userRole[0].name
-		if (userRoleName == 'admin') {
+		const userRole = await RoleModel.find({ _id: user.role._id })
+
+		if (userRole.name == 'admin') {
 			return res
 				.status(400)
 				.json({ message: 'The admin cannot create a booking' })
-		}else if( userState === false){
-			return res
-				.status(400)
-				.json({ message: 'You are a suspended user' })
+		} else if (userState === false) {
+			return res.status(400).json({ message: 'You are a suspended user' })
 		}
 		const soccerField = await SoccerFieldModel.findById(req.body.soccerField)
 		const time = req.body.time
