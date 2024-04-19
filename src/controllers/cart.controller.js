@@ -30,4 +30,21 @@ export const getUserCart = async (req, res) => {
 	}
 }
 
-//TODO: hacer logica de limpiar cart
+export const clearUserCart = async (req, res) => {
+	const { userId } = req.params
+	try {
+		const cart = await CartModel.findOne({ user: userId })
+		if (!cart) {
+			return res.status(404).json({ message: 'Cart not found for this user' })
+		}
+
+		cart.orders = []
+		cart.bookings = []
+		cart.total = 0
+
+		await cart.save()
+		res.status(200).json({ message: 'Cart successufully cleaned.' })
+	} catch (error) {
+		res.status(500).json({ message: error.message })
+	}
+}
