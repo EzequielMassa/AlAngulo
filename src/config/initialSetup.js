@@ -1,7 +1,9 @@
 import { CategoryModel } from '../models/Category.model.js'
 import { ProductModel } from '../models/Product.models.js'
+import RoleModel from '../models/Role.model.js'
 import { SoccerFieldModel } from '../models/SoccerField.model.js'
-
+import { UserModel } from '../models/User.model.js'
+import bcrypt from 'bcrypt'
 export const createSoccerFields = async () => {
 	try {
 		const count = await SoccerFieldModel.estimatedDocumentCount()
@@ -43,7 +45,7 @@ export const createProducts = async () => {
 
 		const tshirtCategory = await CategoryModel.findOne({ name: 'Remeras' })
 		const soccerBallCategory = await CategoryModel.findOne({ name: 'Pelotas' })
-		const drinksCategory = await CategoryModel.findOne({name: 'Bebidas'})
+		const drinksCategory = await CategoryModel.findOne({ name: 'Bebidas' })
 
 		await Promise.all([
 			new ProductModel({
@@ -163,4 +165,44 @@ export const createDefaultCategories = async () => {
 	} catch (error) {
 		console.error(error)
 	}
+}
+
+export const initialUsers = async () => {
+	try {
+		const count = await UserModel.estimatedDocumentCount()
+		const adminUser = await RoleModel.findOne({ name: 'admin' })
+		const user = await RoleModel.findOne({ name: 'user' })
+		const salt = await bcrypt.genSalt(10)
+		const passwordHashAdmin = await bcrypt.hash("admin1234", salt)
+		const passwordHashUser = await bcrypt.hash("user1234", salt)
+		if (count > 0) return
+		await Promise.all(
+			[
+				new UserModel(
+					{
+						name: "Administrador",
+						lastname: "al angulo",
+						email: "adminalangulo@gmail.com",
+						phone: 3816646368,
+						password: passwordHashAdmin,
+						image: "https://i.imgur.com/I03y2Ec.png",
+						role: adminUser._id
+					}).save(),
+					new UserModel(
+						{
+							name: "Usuario",
+							lastname: "al angulo",
+							email: "usuarioalangulo@gmail.com",
+							phone: 3817724663,
+							password: passwordHashUser,
+							image: "https://i.imgur.com/I03y2Ec.png",
+							role:user._id
+						}
+					).save()
+				
+			]
+		)
+	} catch (error) {
+		console.error(error)
+	}	
 }
