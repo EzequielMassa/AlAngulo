@@ -168,7 +168,7 @@ export const createDefaultCategories = async () => {
 }
 
 export const initialUsers = async () => {
-	try {
+	try {	
 		const count = await UserModel.estimatedDocumentCount()
 		const adminUser = await RoleModel.findOne({ name: 'admin' })
 		const user = await RoleModel.findOne({ name: 'user' })
@@ -188,17 +188,18 @@ export const initialUsers = async () => {
 						image: "https://i.imgur.com/I03y2Ec.png",
 						role: adminUser._id
 					}).save(),
-					new UserModel(
-						{
-							name: "Usuario",
-							lastname: "al angulo",
-							email: "usuarioalangulo@gmail.com",
-							phone: 3817724663,
-							password: passwordHashUser,
-							image: "https://i.imgur.com/I03y2Ec.png",
-							role:user._id
-						}
-					).save()
+					// new UserModel(
+					// 	{
+					// 		name: "Usuario",
+					// 		lastname: "al angulo",
+					// 		email: "usuarioalangulo@gmail.com",
+					// 		phone: 3817724663,
+					// 		password: passwordHashUser,
+					// 		image: "https://i.imgur.com/I03y2Ec.png",
+					// 		role:user._id,
+					// 		active:true
+					// 	}
+					// ).save()
 				
 			]
 		)

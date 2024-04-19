@@ -65,6 +65,7 @@ export const createOrder = async (req, res) => {
 		userCart.getCartTotal()
 		res.status(201).json({ data: order })
 	} catch (error) {
+		console.log(error)
 		return res.status(500).json({ message: error.message })
 	}
 }
