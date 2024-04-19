@@ -4,6 +4,7 @@ import {
 	createDefaultCategories,
 	createProducts,
 	createSoccerFields,
+	initialUsers
 } from './config/initialSetup.js'
 import './database/database.js'
 import { createRoles } from './utils/initialRoles.js'
@@ -15,6 +16,7 @@ async function main() {
 		await createDefaultCategories()
 		await createProducts()
 		await createSoccerFields()
+		await initialUsers()
 	})
 }
 
