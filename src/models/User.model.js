@@ -48,7 +48,8 @@ const userSchema = new Schema(
 				/^.*\.(jpg|jpeg|png|gif|bmp)$/i,
 				'Please insert a valid image path',
 			],
-			default: '',
+			default:
+				'https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/user-man-512.png',
 		},
 
 		role: {
