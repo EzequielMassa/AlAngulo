@@ -99,10 +99,13 @@ export const createUser = async (req, res) => {
 
 		return res.status(201).json({ data: token })
 	} catch (error) {
-		return res.status(500).json(error.message)
+		if (error.message.includes('phone')) {
+			return res.status(400).json({ message: 'El telefono ya existe' })
+		} else {
+			return res.status(500).json({ message: error.message })
+		}
 	}
 }
-
 export const deleteUser = async (req, res) => {
 	const { id } = req.params
 	try {
