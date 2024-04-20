@@ -21,6 +21,7 @@ export const createProduct = async (req, res) => {
 
 		if (!productCategory)
 			return res.status(404).json({ message: 'Category not found' })
+
 		const newProduct = await ProductModel.create({
 			...req.body,
 			category: productCategory._id,
@@ -99,7 +100,8 @@ export const updateProduct = async (req, res) => {
 		if (!product) {
 			return res.status(404).json({ message: 'Product not found' })
 		}
-		product.set(req.body)
+		const category = await CategoryModel.findOne({ name: req.body.category })
+		product.set({ ...req.body, category: category._id })
 		await product.save()
 		res.status(200).json(product)
 	} catch (error) {

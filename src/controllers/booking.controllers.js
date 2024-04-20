@@ -19,7 +19,7 @@ export const getAllBookings = async (req, res) => {
 				select: '-createdAt -updatedAt',
 			})
 		if (!bookings) {
-			return res.status(404).json({ message: 'Bookings not found' })
+			return res.status(404).json({ message: 'Reserva no encontrada' })
 		}
 		return res.status(200).json({ data: bookings })
 	} catch (error) {
@@ -32,7 +32,7 @@ export const getAllBookingsByDate = async (req, res) => {
 		const { date } = req.params
 		if (!date.match(dateRegEx)) {
 			return res.status(400).json({
-				message: 'Invalid date , please use the formate : YYYY-mm-dd ',
+				message: 'Fecha invalida , por favor use el formato : AAAA-mm-dd ',
 			})
 		}
 		const bookings = await BookingModel.find({ date: date })
@@ -45,7 +45,7 @@ export const getAllBookingsByDate = async (req, res) => {
 				select: '-createdAt -updatedAt',
 			})
 		if (!bookings) {
-			return res.status(404).json({ message: 'Bookings not found' })
+			return res.status(404).json({ message: 'Reserva no encontrada' })
 		}
 		return res.status(200).json({ data: bookings })
 	} catch (error) {
@@ -66,7 +66,7 @@ export const getBookingById = async (req, res) => {
 				select: '-createdAt -updatedAt',
 			})
 		if (booking.length === 0) {
-			return res.status(404).json({ message: 'Booking not found' })
+			return res.status(404).json({ message: 'Reserva no encontrada' })
 		}
 		return res.status(200).json({ data: booking })
 	} catch (error) {
@@ -83,7 +83,7 @@ export const createBooking = async (req, res) => {
 		if (userRole.name == 'admin') {
 			return res
 				.status(400)
-				.json({ message: 'The admin cannot create a booking' })
+				.json({ message: 'El admin no puede crear reservas' })
 		} else if (userState === false) {
 			return res.status(400).json({ message: 'You are a suspended user' })
 		}
