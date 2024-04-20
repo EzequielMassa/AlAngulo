@@ -44,7 +44,7 @@ export const getUserEmail = async (req, res) => {
 
 export const createUser = async (req, res) => {
 	try {
-		const { name, lastname, email, phone, password, role } = req.body
+		const { name, lastname, email, phone, password, role, image } = req.body
 		if (!password)
 			return res.status(400).json({ message: 'La contraseña es requerida.' })
 		if (password.length < 8)
@@ -60,6 +60,7 @@ export const createUser = async (req, res) => {
 			phone,
 			password: passwordHash,
 			role,
+			image,
 		})
 
 		let tokenRole
