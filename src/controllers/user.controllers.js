@@ -150,6 +150,11 @@ export const login = async (req, res) => {
 		if (!user) {
 			return res.status(404).json({ message: 'El usuario no existe.' })
 		}
+		if (!user.active) {
+			return res
+				.status(400)
+				.json({ message: 'Usuario baneado,contacta con los administradores.' })
+		}
 		const validPassword = await bcrypt.compare(password, user.password)
 		if (!validPassword) {
 			return res.status(400).json({ message: 'Credenciales invalidas.' })
