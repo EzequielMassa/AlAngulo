@@ -22,7 +22,7 @@ const soccerFieldSchema = new Schema(
 		grass: {
 			type: String,
 			enum: {
-				values: ['natural', 'sintetic'],
+				values: ['natural', 'sintetico'],
 				message: '{VALUE} no es un pasto valido.',
 			},
 			default: 'sintetic',

@@ -23,14 +23,14 @@ export const createSoccerFields = async () => {
 				name: 'El potrerito',
 				description: 'Cancha con nostalgia a los viejos potreros',
 				price: 10000,
-				grass: 'sintetic',
+				grass: 'sintetico',
 				size: 5,
 			}).save(),
 			new SoccerFieldModel({
 				name: 'La rustica',
 				description: 'Cancha rapida ideal para los mas rusticos',
 				price: 12000,
-				grass: 'sintetic',
+				grass: 'sintetico',
 				size: 11,
 			}).save(),
 		])

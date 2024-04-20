@@ -24,9 +24,9 @@ export const getSoccerFieldById = async (req, res) => {
 
 export const getAllSoccerFieldsByQuery = async (req, res) => {
 	const { grass, size } = req.query
-	if (grass && grass !== 'sintetic' && grass !== 'natural')
+	if (grass && grass !== 'sintetico' && grass !== 'natural')
 		return res.status(400).json({
-			message: `${grass} no es un pasto valido, las opciones validas son : sintetic | natural`,
+			message: `${grass} no es un pasto valido, las opciones validas son : sintetico | natural`,
 		})
 	if (size && size !== '5' && size !== '11')
 		return res.status(400).json({
