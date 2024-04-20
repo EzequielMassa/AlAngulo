@@ -3,22 +3,22 @@ const orderSchema = new Schema(
 	{
 		orderDate: {
 			type: Date,
-			required: true,
+			required: [true, 'La fecha es requerida.'],
 		},
 		product: {
 			type: Schema.Types.ObjectId,
 			ref: 'Product',
-			required: true,
+			required: [true, 'El producto es requerido.'],
 		},
 		user: {
 			type: Schema.Types.ObjectId,
 			ref: 'User',
-			required: true,
+			required: [true, 'El usuario es requerido.'],
 		},
 		quantity: {
 			type: Number,
 			default: 1,
-			required: [true, 'the quantity is required'],
+			required: [true, 'La cantidad es requerida.'],
 		},
 	},
 	{

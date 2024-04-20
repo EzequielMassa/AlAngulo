@@ -4,34 +4,34 @@ const productSchema = new Schema(
 		name: {
 			type: String,
 			required: true,
-			minLength: [3, 'the field name must have at least 3 characters'],
-			maxLength: [100, 'the field name must have a maximun of 100 characters'],
+			minLength: [3, 'El nombre debe contener al menos 3 caracteres.'],
+			maxLength: [100, 'El nombre debe tener un maximo de 100 caracteres.'],
 		},
 		description: {
 			type: String,
 			required: true,
-			minLength: [3, 'the description field must have at least 3 characters'],
+			minLength: [3, 'La descripcion debe contener al menos 3 caracteres.'],
 			maxLength: [
 				800,
-				'the description field must have a maximun of 800 characters',
+				'La descripcion debe tener un maximo de 800 caracteres.',
 			],
 		},
 		category: {
 			type: Schema.Types.ObjectId,
 			ref: 'Category',
-			required: true,
+			required: [true, 'La categoria es requerida'],
 		},
 		price: {
 			type: Number,
 			required: true,
-			min: [1, 'The min price is 1 , and you enter ${VALUE}'],
+			min: [1, 'El precio minimo es 1 , y usted ingreso : ${VALUE} .'],
 			default: 1,
 		},
 		image: {
 			type: String,
 			match: [
 				/^.*\.(jpg|jpeg|png|gif|bmp)$/i,
-				'Please provide a valid image path',
+				'Por favor ingrese una url de imagen valida (jpg,png,gif,bmp)',
 			],
 			default: 'https://i.imgur.com/I03y2Ec.png',
 		},

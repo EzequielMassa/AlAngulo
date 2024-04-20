@@ -4,39 +4,36 @@ const soccerFieldSchema = new Schema(
 	{
 		name: {
 			type: String,
-			required: [true, 'The name is required'],
-			minLength: [3, 'The field name must contain at least 3 characters'],
-			maxLength: [100, 'The field name must be 100 characters maximum'],
-			unique: true,
+			required: [true, 'El nombre es requerido.'],
+			minLength: [3, 'El nombre debe contener al menos 3 caracteres.'],
+			maxLength: [100, 'El nombre debe tener 100 caracteres como maximo.'],
+			unique: [true, 'El nombre de la cancha debe ser unico.'],
 		},
 		description: {
 			type: String,
-			required: [true, 'The description is required'],
-			minLength: [
-				10,
-				'The field description must contain at least 3 characters',
-			],
-			maxLength: [500, 'The field description must be 500 characters maximum'],
+			required: [true, 'La descripcion es requerida.'],
+			minLength: [10, 'La descripcion debe contener al menos 10 caracteres.'],
+			maxLength: [500, 'La descripcion debe tener 500 caracteres como maximo.'],
 		},
 		price: {
 			type: Number,
-			required: [true, 'The price is required'],
+			required: [true, 'El precio es requerido.'],
 		},
 		grass: {
 			type: String,
 			enum: {
 				values: ['natural', 'sintetic'],
-				message: '{VALUE} is not a valid soccer field type',
+				message: '{VALUE} no es un pasto valido.',
 			},
 			default: 'sintetic',
 			lowercase: true,
-			required: [true, 'The soccer field type is required'],
+			required: [true, 'El pasto es requerido.'],
 		},
 		imgUrl: {
 			type: String,
 			match: [
 				/^.*\.(jpg|jpeg|png|gif|bmp)$/i,
-				'The image path format is invalid',
+				'Por favor ingrese una url de imagen valida (jpg,png,gif,bmp)',
 			],
 			default:
 				'https://images.pexels.com/photos/399187/pexels-photo-399187.jpeg',
@@ -45,9 +42,9 @@ const soccerFieldSchema = new Schema(
 			type: Number,
 			enum: {
 				values: [5, 11],
-				message: '{VALUE} is not a valid soccer field size',
+				message: '{VALUE} no es un tamaño de cancha valido.',
 			},
-			required: [true, 'The soccer field size is required'],
+			required: [true, 'El tamaño de la cancha es requerido.'],
 		},
 	},
 	{

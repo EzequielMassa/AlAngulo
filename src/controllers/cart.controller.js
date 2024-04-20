@@ -35,7 +35,7 @@ export const clearUserCart = async (req, res) => {
 	try {
 		const cart = await CartModel.findOne({ user: userId })
 		if (!cart) {
-			return res.status(404).json({ message: 'Cart not found for this user' })
+			return res.status(404).json({ message: 'Carrito no encontrado.' })
 		}
 
 		cart.orders = []
@@ -43,7 +43,7 @@ export const clearUserCart = async (req, res) => {
 		cart.total = 0
 
 		await cart.save()
-		res.status(200).json({ message: 'Cart successufully cleaned.' })
+		res.status(200).json({ message: 'Pago correctamente efectuado' })
 	} catch (error) {
 		res.status(500).json({ message: error.message })
 	}

@@ -85,7 +85,7 @@ export const createBooking = async (req, res) => {
 				.status(400)
 				.json({ message: 'El admin no puede crear reservas' })
 		} else if (userState === false) {
-			return res.status(400).json({ message: 'You are a suspended user' })
+			return res.status(400).json({ message: 'Su estado actual es suspendido' })
 		}
 		const soccerField = await SoccerFieldModel.findById(req.body.soccerField)
 		const time = req.body.time
@@ -95,21 +95,22 @@ export const createBooking = async (req, res) => {
 			date
 		)
 
-		if (!user) return res.status(404).json({ message: 'User not found' })
+		if (!user) return res.status(404).json({ message: 'Usuario no encontrado' })
 		if (!soccerField)
-			return res.status(404).json({ message: 'Soccerfield not found' })
-		if (!time) return res.status(400).json({ message: 'The time is required' })
+			return res.status(404).json({ message: 'Cancha no encontrada' })
+		if (!time)
+			return res.status(400).json({ message: 'El Horario es requerida' })
 
 		const regExTime = /^([01]\d|2[0-3]):00$/
 		if (!regExTime.test(time)) {
 			return res
 				.status(400)
-				.json({ message: 'Incorrect time format, must be HH:00' })
+				.json({ message: 'Horario incorrecto, debe ser HH:00' })
 		}
 
 		const bookingAlreadyExist = availableHours.find((hour) => hour === time)
 		if (!bookingAlreadyExist) {
-			return res.status(400).json({ message: 'Hour already taken' })
+			return res.status(400).json({ message: 'Horario ya tomado' })
 		}
 
 		const booking = await BookingModel.create({
@@ -130,7 +131,7 @@ export const createBooking = async (req, res) => {
 		if (!userCart) {
 			return res
 				.status(404)
-				.json({ message: `User with Id : ${user} not found` })
+				.json({ message: `Usuario con Id : ${user} no encontrado` })
 		}
 
 		userCart.bookings.push(booking._id)
@@ -148,12 +149,12 @@ export const getAvailableHours = async (req, res) => {
 	if (!soccerfield && !date) {
 		return res
 			.status(400)
-			.json({ message: 'soccerfield and date query not found' })
+			.json({ message: 'Query de cancha y horario no encontrada' })
 	}
 	if (!dateRegEx.test(date)) {
 		return res
 			.status(400)
-			.json({ message: 'Incorrect date format , must be YYYY-mm-dd' })
+			.json({ message: 'Incorrecto formato de fecha , debe ser AAAA-mm-dd' })
 	}
 
 	const queryToDate = new Date(date)
@@ -166,7 +167,7 @@ export const getAvailableHours = async (req, res) => {
 	if (queryToDate < today) {
 		return res
 			.status(400)
-			.json({ message: 'The date  cannot be before the current date ' })
+			.json({ message: 'La fecha no puede ser anterior a la fecha actual.' })
 	}
 	try {
 		const soccerFieldbookings = await getSoccerFieldAvailableHours(
@@ -177,7 +178,7 @@ export const getAvailableHours = async (req, res) => {
 	} catch (error) {
 		return res.status(404).json({
 			message:
-				'We have not been able to find the schedules with the data provided',
+				'No hemos podido encontrar los horarios con los datos facilitados',
 		})
 	}
 }
@@ -212,7 +213,9 @@ export const deleteBooking = async (req, res) => {
 		const { id } = req.params
 		const booking = await BookingModel.findById(id)
 		if (!booking) {
-			return res.status(404).json({ message: `Booking Id : ${id} not found.` })
+			return res
+				.status(404)
+				.json({ message: `Reserva con Id : ${id} no encontrada.` })
 		}
 		await BookingModel.deleteOne({ _id: id })
 		const userCart = await CartModel.findOne({ user: booking.user })
@@ -223,7 +226,7 @@ export const deleteBooking = async (req, res) => {
 		userCart.getCartTotal()
 		return res
 			.status(200)
-			.json({ message: `Booking with Id : ${id} successfully deleted.` })
+			.json({ message: `Reserva con Id : ${id} borrada correctamente.` })
 	} catch (error) {
 		res.status(500).json({ message: error.message })
 	}

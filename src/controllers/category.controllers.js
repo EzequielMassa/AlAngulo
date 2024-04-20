@@ -4,7 +4,7 @@ export const getAllCategories = async (req, res) => {
 	try {
 		const categories = await CategoryModel.find()
 		if (categories.length === 0) {
-			return res.status(404).json({ message: 'No category found' })
+			return res.status(404).json({ message: 'No se encontro la categoria.' })
 		}
 		return res.status(200).json({ data: categories })
 	} catch (error) {
@@ -27,11 +27,11 @@ export const deleteCategory = async (req, res) => {
 		const { id } = req.params
 		const categoryFound = await CategoryModel.findById(id)
 		if (!categoryFound) {
-			return res.status(404).json({ message: 'Category not found' })
+			return res.status(404).json({ message: 'Categoria no encontrada.' })
 		}
 		await CategoryModel.deleteOne({ _id: id })
 		return res.status(200).json({
-			message: `Category with name ${categoryFound.name} was successfully deleted`,
+			message: `Categoria : ${categoryFound.name} se elimino correctamente`,
 		})
 	} catch (error) {
 		res.status(500).json({ message: error.message })
@@ -45,15 +45,17 @@ export const updateCategory = async (req, res) => {
 		const categoryFound = await CategoryModel.findById(id)
 		const categoryOld = categoryFound.name
 		if (!categoryFound) {
-			return res.status(404).json({ message: 'Category not found' })
+			return res.status(404).json({ message: 'Categoria no encontrada' })
 		}
 		if (!description)
-			return res.status(400).json({ message: 'the description is not defined' })
+			return res.status(400).json({ message: 'La descripcion es requerida' })
 		categoryFound.set({ description: description })
 		await categoryFound.save()
 		return res
 			.status(200)
-			.json({ message: `Category ${categoryOld} successfully updated` })
+			.json({
+				message: `Categoria : ${categoryOld} se actualizo correctamente.`,
+			})
 	} catch (error) {
 		res.status(500).json({ message: error.message })
 	}

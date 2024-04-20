@@ -4,24 +4,24 @@ const CategorySchema = new Schema(
 	{
 		name: {
 			type: String,
-			required: [true, 'The name is required'],
-			minLength: [3, 'The field name must contain at least 3 characters'],
-			maxLength: [100, 'The field name must be 100 characters maximum'],
+			required: [true, 'El nombre es requerido.'],
+			minLength: [3, 'El nombre debe tener al menos 3 caracteres.'],
+			maxLength: [100, 'El nombre debe tener un maximo de 100 caracteres.'],
 			unique: true,
 		},
 		description: {
 			type: String,
-			minLength: [
-				3,
-				'The field description must contain at least 3 characters',
+			minLength: [3, 'La descripcion debe contener al menos 3 caracteres.'],
+			maxLength: [
+				500,
+				'La descripcion debe tener un maximo de 500 caracteres.',
 			],
-			maxLength: [500, 'The field description must be 500 characters maximum'],
 		},
 		image: {
 			type: String,
 			match: [
 				/^.*\.(jpg|jpeg|png|gif|bmp)$/i,
-				'Please provide a valid image path',
+				'Por favor ingrese una url de imagen valida (jpg,png,gif,bmp)',
 			],
 			default: 'https://i.imgur.com/isEp9jy.png',
 		},

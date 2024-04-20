@@ -12,7 +12,7 @@ export const getUsers = async (req, res) => {
 		})
 		res.status(200).json({ data: users })
 	} catch (error) {
-		return res.status(404).json({ message: error.message })
+		return res.status(500).json({ message: error.message })
 	}
 }
 
@@ -23,12 +23,11 @@ export const getUser = async (req, res) => {
 			path: 'role',
 			select: '-createdAt -updatedAt -_id',
 		})
-		if (!user) return res.status(404).json({ message: 'User not found' })
+		if (!user)
+			return res.status(404).json({ message: 'Usuario no encontrado.' })
 		return res.status(200).json({ data: user })
 	} catch (error) {
-		return res
-			.status(404)
-			.json({ message: `We couldnt find the user with ID : ${id} ` })
+		return res.status(500).json({ message: error.message })
 	}
 }
 export const getUserEmail = async (req, res) => {
@@ -39,7 +38,7 @@ export const getUserEmail = async (req, res) => {
 	{
 		emailFound.length > 0
 			? res.status(200).json({ data: emailFound })
-			: res.status(400).json({ message: 'Email not found' })
+			: res.status(400).json({ message: 'Email no encontrado.' })
 	}
 }
 
@@ -47,11 +46,11 @@ export const createUser = async (req, res) => {
 	try {
 		const { name, lastname, email, phone, password, role } = req.body
 		if (!password)
-			return res.status(400).json({ message: 'The password is required' })
+			return res.status(400).json({ message: 'La contraseña es requerida.' })
 		if (password.length < 8)
 			return res
 				.status(400)
-				.json({ message: 'The password must have at least 8 characters long' })
+				.json({ message: 'La contraseña debe tener al menos 8 caracteres.' })
 		const salt = await bcrypt.genSalt(10)
 		const passwordHash = await bcrypt.hash(password, salt)
 		const newUser = new UserModel({
@@ -97,7 +96,7 @@ export const createUser = async (req, res) => {
 			}
 		)
 
-		return res.status(200).json({ data: token })
+		return res.status(201).json({ data: token })
 	} catch (error) {
 		return res.status(500).json(error.message)
 	}
@@ -108,11 +107,11 @@ export const deleteUser = async (req, res) => {
 	try {
 		const deletedUser = await UserModel.findByIdAndDelete(id)
 		if (!deleteUser) {
-			return res.status(404).json({ message: 'User not found' })
+			return res.status(404).json({ message: 'Usuario no encontrado.' })
 		}
-		res.json({ message: 'User successfully deleted' })
+		return res.status(200).json({ message: 'Usuario eliminado correctamente.' })
 	} catch (error) {
-		res.status(500).json({ message: 'Internal server error' })
+		return res.status(500).json({ message: error.message })
 	}
 }
 
@@ -125,9 +124,12 @@ export const updateUser = async (req, res) => {
 			{ name, lastname, email, phone, image, role },
 			{ new: true }
 		)
-		res.status(200).json({ data: updateUser })
+		if (!updateUser) {
+			return res.status(404).json({ message: 'Usuario no encontrado' })
+		}
+		return res.status(200).json({ data: updateUser })
 	} catch (error) {
-		res.status(404).json({ message: error.message })
+		return res.status(500).json({ message: error.message })
 	}
 }
 
@@ -135,18 +137,18 @@ export const login = async (req, res) => {
 	const { email, password } = req.body
 	try {
 		if (!email || !password) {
-			return res.status(400).json({ message: 'Please complete all the fields' })
+			return res.status(400).json({ message: 'Rellene todos los campos' })
 		}
 		const user = await UserModel.findOne({ email }).populate({
 			path: 'role',
 			select: 'name -_id',
 		})
 		if (!user) {
-			return res.status(400).json({ message: 'The user do not exist' })
+			return res.status(404).json({ message: 'El usuario no existe.' })
 		}
 		const validPassword = await bcrypt.compare(password, user.password)
 		if (!validPassword) {
-			return res.status(400).json({ message: 'Invalid credentials' })
+			return res.status(400).json({ message: 'Credenciales invalidas.' })
 		}
 
 		const token = jwt.sign(
@@ -161,9 +163,9 @@ export const login = async (req, res) => {
 			process.env.SECRET_KEY,
 			{ expiresIn: '1D' }
 		)
-		res.header(token).json({ token })
+		return res.header(token).json({ token })
 	} catch (error) {
-		res.status(400).json({ message: error.message })
+		res.status(500).json({ message: error.message })
 	}
 }
 export const handleUserState = async (req, res) => {
@@ -172,16 +174,20 @@ export const handleUserState = async (req, res) => {
 
 	try {
 		if (typeof active !== 'boolean') {
-			return res.status(400).json({ message: `${active} is not a valid input` })
+			return res
+				.status(400)
+				.json({ message: `${active} no es un valor valido.` })
 		}
 		const user = await UserModel.findById(id)
 		if (!user) {
-			return res.status(400).json({ message: 'user do not exist' })
+			return res.status(400).json({ message: 'El usuario no existe.' })
 		}
 
 		user.active = active
 		user.save()
-		return res.status(200).json({ message: `user stated changed to ${active}` })
+		return res
+			.status(200)
+			.json({ message: `Estado de usuario cambiado a ${active}` })
 	} catch (error) {
 		return res.status(500).json({ message: error.message })
 	}

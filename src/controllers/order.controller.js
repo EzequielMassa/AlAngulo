@@ -21,22 +21,25 @@ export const createOrder = async (req, res) => {
 	try {
 		const user = await UserModel.findById(req.body.user)
 		const userState = user.active
-		if (!user) return res.status(404).json({ message: 'user not found' })
+		if (!user) return res.status(404).json({ message: 'Usuario no encontrado' })
 
 		const userRole = await RoleModel.find({ _id: user.role._id })
 		if (userRole.name == 'admin') {
 			return res
 				.status(400)
-				.json({ message: 'The admin cannot create an order' })
+				.json({ message: 'El administrador no puede crear ordenes.' })
 		} else if (userState === false) {
-			return res.status(400).json({ message: 'You are a suspended user' })
+			return res
+				.status(400)
+				.json({ message: 'Su estado actual es suspendido.' })
 		}
 		const product = await ProductModel.findById(req.body.product)
-		if (!product) return res.status(404).json({ message: 'product not found' })
+		if (!product)
+			return res.status(404).json({ message: 'Producto no encontrado' })
 
 		const quantity = req.body.quantity
 		if (!quantity)
-			return res.status(400).json({ message: 'quantity is required' })
+			return res.status(400).json({ message: 'La cantidad es requerida' })
 
 		const orderDate = req.body.orderDate
 
@@ -57,7 +60,7 @@ export const createOrder = async (req, res) => {
 		if (!userCart) {
 			return res
 				.status(404)
-				.json({ message: `User with Id : ${user} not found` })
+				.json({ message: `Usuario con Id : ${user} no encontrado.` })
 		}
 
 		userCart.orders.push(order._id)
@@ -65,7 +68,6 @@ export const createOrder = async (req, res) => {
 		userCart.getCartTotal()
 		res.status(201).json({ data: order })
 	} catch (error) {
-		console.log(error)
 		return res.status(500).json({ message: error.message })
 	}
 }
@@ -73,7 +75,8 @@ export const getOrderById = async (req, res) => {
 	const { id } = req.params
 	try {
 		const orderFound = await OrderModel.findById(id)
-		if (!orderFound) return res.status(404).json({ message: 'Order not found' })
+		if (!orderFound)
+			return res.status(404).json({ message: 'Orden no encontrada.' })
 		return res.status(200).json({ data: orderFound })
 	} catch (error) {
 		return res.status(500).json({ message: error.message })
@@ -86,7 +89,7 @@ export const deleteOrder = async (req, res) => {
 
 		if (!orderFound) {
 			return res.status(400).json({
-				message: `We could not find the product with ID : ${id}`,
+				message: `No encontramos el producto con Id : ${id}`,
 			})
 		}
 		await OrderModel.deleteOne({ _id: id })
@@ -101,10 +104,10 @@ export const deleteOrder = async (req, res) => {
 		userCart.getCartTotal()
 		return res
 			.status(200)
-			.json({ message: `The product with ID : ${id} was successfully deleted` })
+			.json({ message: `El producto con Id : ${id} se elimino correctamente.` })
 	} catch (error) {
 		res.status(400).json({
-			message: `We could not find the product with ID: ${req.params.id}`,
+			message: `No pudimos encontrar el producto con Id : ${req.params.id}`,
 		})
 	}
 }

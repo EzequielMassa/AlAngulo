@@ -6,22 +6,19 @@ const bookingSchema = new Schema(
 		user: {
 			type: Schema.Types.ObjectId,
 			ref: 'User',
-			required: [true, 'The User is required and must be a valid user'],
+			required: [true, 'El usuario es requerido y debe existir.'],
 		},
 		soccerField: {
 			type: Schema.Types.ObjectId,
 			ref: 'SoccerField',
-			required: [
-				true,
-				'The SoccerField is required and must be a valid soccerfield',
-			],
+			required: [true, 'La cancha es requerida y debe existir.'],
 		},
 		time: {
 			type: String,
 		},
 		date: {
 			type: String,
-			match: [dateRegEx, 'Incorrect date format , must be YYYY-mm-dd'],
+			match: [dateRegEx, 'Formato de fecha incorrecto , debe ser AAAA-mm-dd'],
 			validate: {
 				validator: function (v) {
 					const fullDate = `${v} ${this.time}:00 GMT+0000`
@@ -32,7 +29,7 @@ const bookingSchema = new Schema(
 					return isOldDate
 				},
 				message:
-					'The date and the time cannot be before the current date and time ',
+					'La fecha y horario no pueden ser anteriores a la fecha y horario actual.',
 			},
 			required: true,
 		},
