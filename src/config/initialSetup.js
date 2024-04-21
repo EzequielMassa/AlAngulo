@@ -161,18 +161,27 @@ export const createDefaultCategories = async () => {
 			new CategoryModel({
 				name: 'Remeras',
 				description: 'Las mejores remeras futboleras de AlAngulo',
+				image: 'https://i.imgur.com/YxqFiPe.png',
 			}).save(),
 			new CategoryModel({
 				name: 'Pelotas',
 				description: 'Las mejores pelotas futboleras de AlAngulo',
+				image: 'https://i.imgur.com/tipfgS4.png',
 			}).save(),
 			new CategoryModel({
 				name: 'Tazas',
 				description: 'Las mejores tazas futboleras de AlAngulo',
+				image: 'https://i.imgur.com/AwiRQcE.png',
 			}).save(),
 			new CategoryModel({
 				name: 'Bebidas',
 				description: 'Las mejores bebidas de AlAngulo',
+				image: 'https://i.imgur.com/gUZHaCA.png',
+			}).save(),
+			new CategoryModel({
+				name: 'Botines',
+				description: 'Los mejores botines de AlAngulo',
+				image: 'https://i.imgur.com/xPfB3iV.png',
 			}).save(),
 		])
 	} catch (error) {
