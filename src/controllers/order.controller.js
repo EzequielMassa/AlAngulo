@@ -1,9 +1,8 @@
 import { CartModel } from '../models/Cart.model.js'
+import { OrderModel } from '../models/Order.model.js'
 import { ProductModel } from '../models/Product.models.js'
 import RoleModel from '../models/Role.model.js'
 import { UserModel } from '../models/User.model.js'
-//fix import
-import { OrderModel } from '../models/order.model.js'
 
 export const getAllOrders = async (req, res) => {
 	try {
