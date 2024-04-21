@@ -18,6 +18,8 @@ export const createSoccerFields = async () => {
 				price: 15000,
 				grass: 'natural',
 				size: 11,
+				imgUrl:
+					'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiaSWnekiFRIjEnozOhh9klkhKU4mQl0ojIyDqiTO97o7HsAJ0anZb40OFHGc9UXnSUSGis9ag3EPOL8QfkW5N-NQ7su5CPTb1Yn9OqQaqaYo7JUivfxRdhg1jGk6AkTyNB4XdWgy7ui2k/s1600/index1.jpg',
 			}).save(),
 			new SoccerFieldModel({
 				name: 'El potrerito',
@@ -25,6 +27,8 @@ export const createSoccerFields = async () => {
 				price: 10000,
 				grass: 'sintetico',
 				size: 5,
+				imgUrl:
+					'https://www.hoysejuega.com/uploads/Modules/ImagenesComplejos/1357.jpg',
 			}).save(),
 			new SoccerFieldModel({
 				name: 'La rustica',
