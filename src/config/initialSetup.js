@@ -183,6 +183,11 @@ export const createDefaultCategories = async () => {
 				description: 'Los mejores botines de AlAngulo',
 				image: 'https://i.imgur.com/xPfB3iV.png',
 			}).save(),
+			new CategoryModel({
+				name: 'Medias',
+				description: 'Las mejores medias de AlAngulo',
+				image: 'https://i.imgur.com/GfALFy1.png',
+			}).save(),
 		])
 	} catch (error) {
 		console.error(error)
