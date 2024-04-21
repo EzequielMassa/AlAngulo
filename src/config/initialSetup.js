@@ -250,7 +250,5 @@ export const initialUsers = async () => {
 				total: 0,
 			}).save(),
 		])
-	} catch (error) {
-		console.error(error)
-	}
+	} catch (error) {}
 }
