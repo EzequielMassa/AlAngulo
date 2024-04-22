@@ -16,8 +16,10 @@ app.use(morgan('dev'))
 app.use(
 	cors({
 		origin: 'https://alangulo.onrender.com',
+		methods: ['GET', 'POST', 'PUT', 'DELETE'],
 	})
 )
+
 app.options('*', cors())
 
 app.get('/', (req, res) => {
