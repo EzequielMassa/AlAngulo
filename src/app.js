@@ -10,14 +10,7 @@ import SoccerFieldRoutes from './routes/soccerField.routes.js'
 import UserRoutes from './routes/user.routes.js'
 
 const app = express()
-
-const corsOptions = {
-	origin: '*',
-	credentials: true,
-	optionSuccessStatus: 200,
-}
-
-app.use(cors(corsOptions))
+app.use(cors({ origin: '*', allowedHeaders: ['Content-Type'] }))
 app.use(express.json())
 app.use(morgan('dev'))
 
