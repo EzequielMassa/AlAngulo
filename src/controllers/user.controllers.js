@@ -172,7 +172,7 @@ export const login = async (req, res) => {
 			process.env.SECRET_KEY,
 			{ expiresIn: '1D' }
 		)
-		return res.header(token).json({ token })
+		return res.header('x-access-token', token).json({ token })
 	} catch (error) {
 		res.status(500).json({ message: error.message })
 	}
