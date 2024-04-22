@@ -10,13 +10,10 @@ import SoccerFieldRoutes from './routes/soccerField.routes.js'
 import UserRoutes from './routes/user.routes.js'
 
 const app = express()
-app.use(cors({ origin: '*', allowedHeaders: ['Content-Type'] }))
+app.use(cors())
 app.use(express.json())
 app.use(morgan('dev'))
 
-app.get('/', (req, res) => {
-	res.send('Bienvenido a la api de AlAngulo')
-})
 app.use('/api', CartRoutes)
 app.use('/api', OrderRoutes)
 app.use('/api', BookingRoutes)
