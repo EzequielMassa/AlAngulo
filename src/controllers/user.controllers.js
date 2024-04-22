@@ -97,7 +97,7 @@ export const createUser = async (req, res) => {
 			}
 		)
 
-		return res.header('x-access-token', token).status(201).json({ data: token })
+		return res.status(201).header('x-access-token', token).json({ data: token })
 	} catch (error) {
 		if (error.message.includes('phone')) {
 			return res.status(400).json({ message: 'El telefono ya existe' })
@@ -172,7 +172,7 @@ export const login = async (req, res) => {
 			process.env.SECRET_KEY,
 			{ expiresIn: '1D' }
 		)
-		return res.header('x-access-token', token).res.status(200).json({ token })
+		return res.status(200).header('x-access-token', token).json({ token })
 	} catch (error) {
 		res.status(500).json({ message: error.message })
 	}
