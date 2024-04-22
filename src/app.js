@@ -18,6 +18,7 @@ app.use(
 		origin: 'https://alangulo.onrender.com',
 	})
 )
+app.options('*', cors())
 
 app.get('/', (req, res) => {
 	res.send('Bienvenido a la api de AlAngulo')
