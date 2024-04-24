@@ -123,11 +123,14 @@ export const updateUser = async (req, res) => {
 	const { id } = req.params
 	const { name, lastname, email, phone, image, role } = req.body
 	try {
+		let foundRole = await RoleModel.findOne({ name: role })
+
 		const updateUser = await UserModel.findByIdAndUpdate(
 			id,
-			{ name, lastname, email, phone, image, role },
+			{ name, lastname, email, phone, image, role: foundRole._id },
 			{ new: true }
 		)
+
 		if (!updateUser) {
 			return res.status(404).json({ message: 'Usuario no encontrado' })
 		}
