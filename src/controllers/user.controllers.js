@@ -121,13 +121,13 @@ export const deleteUser = async (req, res) => {
 
 export const updateUser = async (req, res) => {
 	const { id } = req.params
-	const { name, lastname, email, phone, image, role } = req.body
+	const { name, lastname, image, role } = req.body
 	try {
 		let foundRole = await RoleModel.findOne({ name: role })
 
 		const updateUser = await UserModel.findByIdAndUpdate(
 			id,
-			{ name, lastname, email, phone, image, role: foundRole._id },
+			{ name, lastname, image, role: foundRole._id },
 			{ new: true }
 		)
 
