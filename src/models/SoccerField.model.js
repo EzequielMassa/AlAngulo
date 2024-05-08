@@ -6,14 +6,14 @@ const soccerFieldSchema = new Schema(
 			type: String,
 			required: [true, 'El nombre es requerido.'],
 			minLength: [3, 'El nombre debe contener al menos 3 caracteres.'],
-			maxLength: [100, 'El nombre debe tener 100 caracteres como maximo.'],
+			maxLength: [50, 'El nombre debe tener 50 caracteres como maximo.'],
 			unique: [true, 'El nombre de la cancha debe ser unico.'],
 		},
 		description: {
 			type: String,
 			required: [true, 'La descripcion es requerida.'],
 			minLength: [10, 'La descripcion debe contener al menos 10 caracteres.'],
-			maxLength: [500, 'La descripcion debe tener 500 caracteres como maximo.'],
+			maxLength: [50, 'La descripcion debe tener 50 caracteres como maximo.'],
 		},
 		price: {
 			type: Number,
