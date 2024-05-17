@@ -12,6 +12,8 @@ const bookingSchema = new Schema(
 			type: Schema.Types.ObjectId,
 			ref: 'SoccerField',
 			required: [true, 'La cancha es requerida y debe existir.'],
+			minLength: [3, 'El nombre debe contener al menos 3 caracteres.'],
+			maxLength: [50, 'El nombre debe tener 50 caracteres como maximo.']
 		},
 		time: {
 			type: String,
