@@ -9,6 +9,8 @@ const orderSchema = new Schema(
 			type: Schema.Types.ObjectId,
 			ref: 'Product',
 			required: [true, 'El producto es requerido.'],
+			minLength: [3, 'El nombre debe contener al menos 3 caracteres.'],
+			maxLength: [50, 'El nombre debe tener 50 caracteres como maximo.']
 		},
 		user: {
 			type: Schema.Types.ObjectId,
